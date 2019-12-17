@@ -55,13 +55,13 @@ private:
         return value;
     }
 
-    inline bool file_exists(const std::string& file_path) {
+    inline bool file_exists(const std::string& file_path) const {
         struct stat buffer;
         return (stat (file_path.c_str(), &buffer) == 0);
     }
 
     template <class T>
-    inline T convert_numeric(const std::string& string_value) {
+    inline T convert_numeric(const std::string& string_value) const {
         T value;
 
         std::stringstream ss;
