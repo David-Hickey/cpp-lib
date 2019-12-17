@@ -78,6 +78,27 @@ public:
     bool empty() const {
         return N == 0;
     }
+
+    T sum() const {
+        T output = 0;
+        for (const T& t : *this) {
+            output += t;
+        }
+
+        return output;
+    }
+
+    MathArray<T, N> cumsum() const {
+        MathArray<T, N> output{};
+
+        T running_total = 0;
+        for (size_t i = 0; i < N; ++i) {
+            running_total += (*this)[i];
+            output[i] = running_total;
+        }
+
+        return output;
+    }
 };
 
 
