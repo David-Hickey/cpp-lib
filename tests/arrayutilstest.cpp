@@ -280,6 +280,13 @@ void test_magnitude_distance() {
     assert(distance_between(a1, a2) == 5, "Failed distance");
 }
 
+void test_sum() {
+    MathArray<int, 5> a1{13, 7, 23, 0, 9};
+
+    assert(a1.sum() == 52, "Failed summation");
+    assert_all_eq(a1.cumsum(), MathArray<int, 5>{13, 20, 43, 43, 52}, "Failed cumsum");
+}
+
 int main() {
     test_any();
     test_all();
@@ -300,6 +307,8 @@ int main() {
     test_boolean_misc_ops();
 
     test_magnitude_distance();
+
+    test_sum();
 
     return 0;
 }
