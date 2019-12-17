@@ -9,3 +9,5 @@ Collection of libraries used by C++ projects in my PhD.
 * `fluidutils.hpp`: an ever-growing set of handy hydrodynamics-related functions
 * `config.hpp`: my nice wrapper around the less nice but very powerful `SimpleIni.h` library (`SimpleIni.h` is not mine)
 * `argparse.hpp`: also not mine, but a handy utility to read CLI arguments which mirrors Python's `arseparse`
+
+And last (but not least) an entire suite of tests to make sure everything works nicely. :)
