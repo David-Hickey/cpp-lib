@@ -1,8 +1,10 @@
 CXX := g++
 
-BUILD_DIR ?= ./build
+TEST_DIR ?= ./tests
+BUILD_DIR ?= $(TEST_DIR)/build
 
-INC_FLAGS := -I..
+
+INC_FLAGS := -I.
 CXXFLAGS := $(INC_FLAGS) -Ofast -std=c++17
 
 .PHONY: test
