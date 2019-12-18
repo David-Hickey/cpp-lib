@@ -64,19 +64,18 @@ inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position
 
     const MathArray<double, 3> force_prefactor = force / (8 * M_PI * shear_viscosity);
 
-    if (include_translation_terms) {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                const double prefactor = force_prefactor[j];
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            const double prefactor = force_prefactor[j];
 
-                const double term_1a = delta(i, j) / r_mag;
-                const double term_1b = r[i] * r[j] / (r_mag * r_mag * r_mag);
 
-                const double term_2a = -delta(i, j) / R_mag;
-                const double term_2b = -R[i] * R[j] / (R_mag * R_mag * R_mag);
+            const double term_1a = include_translation_terms ? delta(i, j) / r_mag : 0;
+            const double term_1b = include_translation_terms ? r[i] * r[j] / (r_mag * r_mag * r_mag) : 0;
 
-                flow_speed[i] += prefactor * (term_1a + term_1b + term_2a + term_2b);
-            }
+            const double term_2a = -delta(i, j) / R_mag;
+            const double term_2b = -R[i] * R[j] / (R_mag * R_mag * R_mag);
+
+            flow_speed[i] += prefactor * (term_1a + term_1b + term_2a + term_2b);
         }
     }
 
