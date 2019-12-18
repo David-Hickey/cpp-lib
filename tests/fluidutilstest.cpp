@@ -47,7 +47,8 @@ void test_blake() {
     const MathArray<double, 3> ratio = diff / andrej_answer;
     const MathArray<double, 3> wrongness = abs(ratio);
 
-    // Basically assume they differ by under 1 in part in
+    // Basically assume they differ by under 1 in part in 1e-5. A number chosen
+    // because that's about the precision of what I typed for Andrej's answer.
     assert(all(wrongness < 1e-5), "Failed comparison with Andrej");
 }
 
