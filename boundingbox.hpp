@@ -108,12 +108,12 @@ private:
     const MathArray<double, 3> upper_bounds;
 
     template <class T>
-    T reflect_through(T coordinate, double bound) const {
+    T reflect_through(const T& coordinate, const double bound) const {
         return 2 * bound - coordinate;
     }
 
     template <class T>
-    T reflect_through_index(T coordinate, int index) const {
+    T reflect_through_index(const T& coordinate, const int index) const {
         if (coordinate > this->upper_bounds[index]) {
             return 2 * this->upper_bounds[index] - coordinate;
         } else if (coordinate < this->lower_bounds[index]) {
