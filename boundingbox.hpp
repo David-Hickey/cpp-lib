@@ -76,13 +76,7 @@ public:
     }
 
     inline double volume() const {
-        double volume = 1;
-
-        for (size_t i = 0; i < 3; ++i) {
-            volume *= (this->upper_bounds[i] - this->lower_bounds[i]);
-        }
-
-        return volume;
+        return (this->upper_bounds - this->lower_bounds).prod();
     }
 
     inline const MathArray<double, 3>& get_upper_bounds() const {
