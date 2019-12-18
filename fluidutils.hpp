@@ -2,6 +2,8 @@
 #include "mathutils.hpp"
 #include "boundingbox.hpp"
 
+#include <functional>
+
 inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& position, const MathArray<double, 3>& sphere_position, const MathArray<double, 3>& translation_velocity, const double sphere_radius) {
     const MathArray<double, 3> new_coords = position - sphere_position;
     const double distance = magnitude(new_coords);
@@ -23,6 +25,19 @@ inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& posi
 
 inline MathArray<double, 3> stokes_drag(const MathArray<double, 3>& velocity, const double shear_viscosity, const double radius) {
     return (6 * M_PI * shear_viscosity * radius) * velocity;
+}
+
+inline double calculate_divergence(const std::function<MathArray<double, 3>(MathArray<double, 3>)>& f, const MathArray<double, 3>& position, const double dx=1e-10) {
+    double divergence = 0;
+
+    for (size_t i = 0; i < 3; ++i) {
+        const auto position_plus = position.copy_add_index(i, dx / 2.0);
+        const auto position_minus = position.copy_add_index(i, -dx / 2.0);
+
+        divergence += (f(position_plus)[i] - f(position_minus)[i]) / dx;
+    }
+
+    return divergence;
 }
 
 static inline MathArray<double, 3> transform_position(const MathArray<double, 3>& position, const double zmin) {
