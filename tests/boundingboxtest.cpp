@@ -2,6 +2,8 @@
 #include "arrayutils.hpp"
 #include "testutils.hpp"
 
+#include <random>
+
 const BoundingBox bb(96, 100, 98);
 const MathArray<int, 3> inside{1, 1, 1};
 const MathArray<int, 3> outside_x_greater{53, 0, 0};
@@ -97,10 +99,24 @@ void test_constructors() {
     assert_all_eq(bb1.get_upper_bounds(), bb3.get_upper_bounds(), "copy constructor failed");
 }
 
+void test_random() {
+    std::random_device dev;
+    std::mt19937 engine(dev());
+
+    const BoundingBox bb(10, 20, 30);
+
+    for (size_t i = 0; i < 1000; ++i) {
+        const MathArray<double, 3> random_point = bb.random_point_in_bounds(engine);
+
+        assert(bb.in_bounds(random_point), "Random point in bounds was out of bounds");
+    }
+}
+
 int main() {
     test_contains();
     test_reflect();
     test_volume();
     test_getters();
     test_constructors();
+    test_random();
 }
