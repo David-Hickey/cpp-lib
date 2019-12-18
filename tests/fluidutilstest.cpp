@@ -28,7 +28,7 @@ std::function<MathArray<double, 3>(const MathArray<double, 3>&, const MathArray<
 void test_blake() {
     const BoundingBox bb(-100, +100, -100, +100, 0, 200);
     const MathArray<double, 3> real_sphere_location{0, 0, 10};
-    const double shear_viscosity = M_PI;
+    const double shear_viscosity = 1;
 
     // Curried function to test blake tensor.
     auto blake_tester = curry_blake_tester(bb, real_sphere_location, shear_viscosity);
@@ -37,6 +37,18 @@ void test_blake() {
     assert(all(abs(blake_tester(MathArray<double, 3>{-10, 0, 0}, MathArray<double, 3>{-1, 0, 0}) - MathArray<double, 3>{0, 0, 0}) < 1e-12), "Failed blake tensor 1");
     assert(all(abs(blake_tester(MathArray<double, 3>{3, -8, 0}, MathArray<double, 3>{-1, 0, 0}) - MathArray<double, 3>{0, 0, 0}) < 1e-12), "Failed blake tensor 2");
     assert(all(abs(blake_tester(MathArray<double, 3>{3, -8, 0}, MathArray<double, 3>{-1, 5, 0}) - MathArray<double, 3>{0, 0, 0}) < 1e-12), "Failed blake tensor 3");
+
+    // Test agreement with Andrej, since we're pretty sure he's right. :)
+    const MathArray<double, 3> point_force = MathArray<double, 3>{1, 5, 2} * (8 * M_PI);
+    const MathArray<double, 3> position{3, -8, 17};
+    const MathArray<double, 3> andrej_answer = MathArray<double, 3>{-0.0231991, 0.370484, -0.169464};
+    const MathArray<double, 3> my_answer = blake_tester(position, point_force);
+    const MathArray<double, 3> diff = abs(andrej_answer - my_answer);
+    const MathArray<double, 3> ratio = diff / andrej_answer;
+    const MathArray<double, 3> wrongness = abs(ratio);
+
+    // Basically assume they differ by under 1 in part in
+    assert(all(wrongness < 1e-5), "Failed comparison with Andrej");
 }
 
 void test_translation() {
