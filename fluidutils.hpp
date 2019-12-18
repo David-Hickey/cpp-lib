@@ -2,6 +2,25 @@
 #include "mathutils.hpp"
 #include "boundingbox.hpp"
 
+inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& position, const MathArray<double, 3>& sphere_position, const MathArray<double, 3>& translation_velocity, const double sphere_radius) {
+    const MathArray<double, 3> new_coords = position - sphere_position;
+    const double distance = magnitude(new_coords);
+
+    MathArray<double, 3> flow_speed{};
+
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            flow_speed[i] -= 0.75 * sphere_radius * translation_velocity[j] * delta(i, j) / distance;
+            flow_speed[i] -= 0.75 * sphere_radius * translation_velocity[j] * new_coords[i] * new_coords[j] / std::pow(distance, 3);
+
+            flow_speed[i] -= 0.75 * std::pow(sphere_radius, 3) * translation_velocity[j] * delta(i, j) / (3.0 * std::pow(distance, 3));
+            flow_speed[i] += 0.75 * std::pow(sphere_radius, 3) * translation_velocity[j] * new_coords[i] * new_coords[j] / std::pow(distance, 5);
+        }
+    }
+
+    return flow_speed + translation_velocity;
+}
+
 inline MathArray<double, 3> stokes_drag(const MathArray<double, 3>& velocity, const double shear_viscosity, const double radius) {
     return (6 * M_PI * shear_viscosity * radius) * velocity;
 }
