@@ -287,6 +287,17 @@ void test_sum() {
     assert_all_eq(a1.cumsum(), MathArray<int, 5>{13, 20, 43, 43, 52}, "Failed cumsum");
 }
 
+void test_prod() {
+    MathArray<int, 5> a1{13, 7, 23, 0, 9};
+    MathArray<int, 5> a2{13, 7, 23, -1, 9};
+
+    assert(a1.prod() == 0, "Failed product");
+    assert(a2.prod() == -18837, "Failed product");
+
+    assert_all_eq(a1.cumprod(), MathArray<int, 5>{13, 91, 2093, 0, 0}, "Failed cumprod 1");
+    assert_all_eq(a2.cumprod(), MathArray<int, 5>{13, 91, 2093, -2093, -18837}, "Failed cumprod 2");
+}
+
 void test_set() {
     MathArray<int, 5> a1{1, 2, 3, 4, 5};
 
@@ -355,6 +366,7 @@ int main() {
     test_magnitude_distance();
 
     test_sum();
+    test_prod();
 
     test_set();
     test_add_index();

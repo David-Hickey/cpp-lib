@@ -100,6 +100,28 @@ public:
         return output;
     }
 
+    T prod() const {
+        T output = 1;
+
+        for (const T& t : *this) {
+            output *= t;
+        }
+
+        return output;
+    }
+
+    MathArray<T, N> cumprod() const {
+        MathArray<T, N> output{};
+
+        T running_total = 1;
+        for (size_t i = 0; i < N; ++i) {
+            running_total *= (*this)[i];
+            output[i] = running_total;
+        }
+
+        return output;
+    }
+
     MathArray<T, N> set(const size_t index, const T&& value) {
         this->data[index] = value;
 
