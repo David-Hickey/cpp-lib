@@ -30,4 +30,4 @@ $(BUILD_DIR)/fluidutilstest.out: $(TEST_DIR)/fluidutilstest.cpp
 	./$@
 
 clean:
-	rm $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR)/*
