@@ -41,11 +41,7 @@ inline double calculate_divergence(const std::function<MathArray<double, 3>(Math
 }
 
 static inline MathArray<double, 3> transform_position(const MathArray<double, 3>& position, const double zmin) {
-    return MathArray<double, 3>{
-        position[0],
-        position[1],
-        position[2] - zmin
-    };
+    return position.copy_add_index(2, -zmin);
 }
 
 inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const double z_min, const double shear_viscosity, const bool include_translation_terms=true) {
