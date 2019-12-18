@@ -33,9 +33,9 @@ static inline MathArray<double, 3> transform_position(const MathArray<double, 3>
     };
 }
 
-inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const BoundingBox& bounds, const double shear_viscosity) {
-    const MathArray<double, 3> transformed_position = transform_position(position, bounds.get_zmin());
-    const MathArray<double, 3> transformed_sphere_position = transform_position(real_sphere_location, bounds.get_zmin());
+inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const double z_min, const double shear_viscosity) {
+    const MathArray<double, 3> transformed_position = transform_position(position, z_min);
+    const MathArray<double, 3> transformed_sphere_position = transform_position(real_sphere_location, z_min);
 
     const MathArray<double, 3> r = transformed_position - transformed_sphere_position;
     const MathArray<double, 3> image_sphere_location{transformed_sphere_position[0], transformed_sphere_position[1], -transformed_sphere_position[2]};
@@ -83,4 +83,8 @@ inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position
     }
 
     return flow_speed;
+}
+
+inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const BoundingBox& bb, const double shear_viscosity) {
+    return blake_tensor_at(position, real_sphere_location, force, bb.get_zmin(), shear_viscosity);
 }
