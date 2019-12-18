@@ -85,9 +85,22 @@ void test_getters() {
     assert(bb.get_zsize() == 98, "Failed get_zsize");
 }
 
+void test_constructors() {
+    const BoundingBox bb1(-5, +5, -10, +10, -15, +15);
+    const BoundingBox bb2(10, 20, 30);
+    const BoundingBox bb3(bb1);
+
+    assert_all_eq(bb1.get_lower_bounds(), bb2.get_lower_bounds(), "3-argument constructor failed");
+    assert_all_eq(bb1.get_upper_bounds(), bb2.get_upper_bounds(), "3-argument constructor failed");
+
+    assert_all_eq(bb1.get_lower_bounds(), bb3.get_lower_bounds(), "copy constructor failed");
+    assert_all_eq(bb1.get_upper_bounds(), bb3.get_upper_bounds(), "copy constructor failed");
+}
+
 int main() {
     test_contains();
     test_reflect();
     test_volume();
     test_getters();
+    test_constructors();
 }
