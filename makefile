@@ -2,6 +2,7 @@ CXX := g++
 
 TEST_DIR ?= ./tests
 BUILD_DIR ?= $(TEST_DIR)/build
+SRC_DIR ?= .
 
 
 INC_FLAGS := -I.
@@ -13,19 +14,19 @@ all:
 
 test: $(BUILD_DIR)/arrayutilstest.out $(BUILD_DIR)/boundingboxtest.out $(BUILD_DIR)/mathutilstest.out $(BUILD_DIR)/fluidutilstest.out
 
-$(BUILD_DIR)/arrayutilstest.out: $(TEST_DIR)/arrayutilstest.cpp
+$(BUILD_DIR)/arrayutilstest.out: $(TEST_DIR)/arrayutilstest.cpp $(SRC_DIR)/arrayutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
-$(BUILD_DIR)/boundingboxtest.out: $(TEST_DIR)/boundingboxtest.cpp
+$(BUILD_DIR)/boundingboxtest.out: $(TEST_DIR)/boundingboxtest.cpp $(SRC_DIR)/boundingbox.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
-$(BUILD_DIR)/mathutilstest.out: $(TEST_DIR)/mathutilstest.cpp
+$(BUILD_DIR)/mathutilstest.out: $(TEST_DIR)/mathutilstest.cpp $(SRC_DIR)/mathutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
-$(BUILD_DIR)/fluidutilstest.out: $(TEST_DIR)/fluidutilstest.cpp
+$(BUILD_DIR)/fluidutilstest.out: $(TEST_DIR)/fluidutilstest.cpp $(SRC_DIR)/fluidutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
