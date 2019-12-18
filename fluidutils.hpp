@@ -33,7 +33,7 @@ static inline MathArray<double, 3> transform_position(const MathArray<double, 3>
     };
 }
 
-inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const double z_min, const double shear_viscosity) {
+inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const double z_min, const double shear_viscosity, const bool include_translation_terms=true) {
     const MathArray<double, 3> transformed_position = transform_position(position, z_min);
     const MathArray<double, 3> transformed_sphere_position = transform_position(real_sphere_location, z_min);
 
@@ -48,17 +48,20 @@ inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position
     MathArray<double, 3> flow_speed{};
 
     const MathArray<double, 3> force_prefactor = force / (8 * M_PI * shear_viscosity);
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            const double prefactor = force_prefactor[j];
 
-            const double term_1a = delta(i, j) / r_mag;
-            const double term_1b = r[i] * r[j] / (r_mag * r_mag * r_mag);
+    if (include_translation_terms) {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                const double prefactor = force_prefactor[j];
 
-            const double term_2a = -delta(i, j) / R_mag;
-            const double term_2b = -R[i] * R[j] / (R_mag * R_mag * R_mag);
+                const double term_1a = delta(i, j) / r_mag;
+                const double term_1b = r[i] * r[j] / (r_mag * r_mag * r_mag);
 
-            flow_speed[i] += prefactor * (term_1a + term_1b + term_2a + term_2b);
+                const double term_2a = -delta(i, j) / R_mag;
+                const double term_2b = -R[i] * R[j] / (R_mag * R_mag * R_mag);
+
+                flow_speed[i] += prefactor * (term_1a + term_1b + term_2a + term_2b);
+            }
         }
     }
 
