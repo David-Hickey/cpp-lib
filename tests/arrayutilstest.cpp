@@ -287,6 +287,29 @@ void test_sum() {
     assert_all_eq(a1.cumsum(), MathArray<int, 5>{13, 20, 43, 43, 52}, "Failed cumsum");
 }
 
+void test_set() {
+    MathArray<int, 5> a1{1, 2, 3, 4, 5};
+
+    // rvalue copy set test
+    assert_all_eq(a1.copy_set(3, -19), MathArray<int, 5>{1, 2, 3, -19, 5}, "Failed copy_set rvalue");
+    assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, 4, 5}, "Failed copy_set rvalue");
+
+    // rvalue set test
+    assert_all_eq(a1.set(3, -17), MathArray<int, 5>{1, 2, 3, -17, 5}, "Failed set rvalue");
+    assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, -17, 5}, "Failed set rvalue");
+
+
+    int set1 = 43;
+    int set2 = 807;
+    // lvalue copy set test
+    assert_all_eq(a1.copy_set(3, set1), MathArray<int, 5>{1, 2, 3, set1, 5}, "Failed copy_set lvalue");
+    assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, -17, 5}, "Failed copy_set lvalue");
+
+    // lvalue set test
+    assert_all_eq(a1.set(3, set2), MathArray<int, 5>{1, 2, 3, set2, 5}, "Failed set lvalue");
+    assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, set2, 5}, "Failed set lvalue");
+}
+
 int main() {
     test_any();
     test_all();
@@ -309,6 +332,8 @@ int main() {
     test_magnitude_distance();
 
     test_sum();
+
+    test_set();
 
     return 0;
 }
