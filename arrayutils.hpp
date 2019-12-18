@@ -100,26 +100,48 @@ public:
         return output;
     }
 
-    MathArray<T, N> set(size_t index, T&& value) {
+    MathArray<T, N> set(const size_t index, const T&& value) {
         this->data[index] = value;
 
         return *this;
     }
 
-    MathArray<T, N> set(size_t index, T& value) {
+    MathArray<T, N> set(const size_t index, const T& value) {
         this->data[index] = value;
 
         return *this;
     }
 
-    MathArray<T, N> copy_set(size_t index, T& value) const {
+    MathArray<T, N> copy_set(const size_t index, const T& value) const {
         MathArray<T, N> output(*this);
         return output.set(index, value);
     }
 
-    MathArray<T, N> copy_set(size_t index, T&& value) const {
+    MathArray<T, N> copy_set(const size_t index, const T&& value) const {
         MathArray<T, N> output(*this);
         return output.set(index, value);
+    }
+
+    MathArray<T, N> add_index(const size_t index, const T&& value) {
+        this->data[index] += value;
+
+        return *this;
+    }
+
+    MathArray<T, N> add_index(const size_t index, const T& value) {
+        this->data[index] += value;
+
+        return *this;
+    }
+
+    MathArray<T, N> copy_add_index(const size_t index, const T& value) const {
+        MathArray<T, N> output(*this);
+        return output.add_index(index, value);
+    }
+
+    MathArray<T, N> copy_add_index(const size_t index, const T&& value) const {
+        MathArray<T, N> output(*this);
+        return output.add_index(index, value);
     }
 };
 
