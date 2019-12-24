@@ -1,5 +1,7 @@
 #pragma once
 
+#include "mathutils.hpp"
+
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
@@ -164,6 +166,28 @@ public:
     MathArray<T, N> copy_add_index(const size_t index, const T&& value) const {
         MathArray<T, N> output(*this);
         return output.add_index(index, value);
+    }
+
+    T dot(const MathArray<T, N>& other) const {
+        return ((*this) * other).sum();
+    }
+
+    MathArray<T, N> cross(const MathArray<T, N>& other) const {
+        if (N == 3) {
+            MathArray<T, N> output{};
+
+            for (size_t i = 0; i < N; ++i) {
+                for (size_t j = 0; j < N; ++j) {
+                    for (size_t k = 0; k < N; ++k) {
+                        output[i] += levicevita(i, j, k) * (*this)[j] * other[k];
+                    }
+                }
+            }
+
+            return output;
+        } else {
+            return MathArray<T, N>{};
+        }
     }
 };
 

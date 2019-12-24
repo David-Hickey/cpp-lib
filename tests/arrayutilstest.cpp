@@ -298,6 +298,14 @@ void test_prod() {
     assert_all_eq(a2.cumprod(), MathArray<int, 5>{13, 91, 2093, -2093, -18837}, "Failed cumprod 2");
 }
 
+void test_dot_cross() {
+    MathArray<int, 3> a1 = {13, 27, -9};
+    MathArray<int, 3> a2 = {413, 4, 0};
+
+    assert_all_eq(a1.cross(a2), MathArray<int, 3>{36, -3717, -11099}, "Failed cross product");
+    assert(a1.dot(a2) == 5477, "Failed dot product");
+}
+
 void test_set() {
     MathArray<int, 5> a1{1, 2, 3, 4, 5};
 
@@ -370,6 +378,8 @@ int main() {
 
     test_set();
     test_add_index();
+
+    test_dot_cross();
 
     return 0;
 }
