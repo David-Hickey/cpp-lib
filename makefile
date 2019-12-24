@@ -12,9 +12,13 @@ CXXFLAGS := $(INC_FLAGS) -Ofast -std=c++17
 
 all:
 
-test: $(BUILD_DIR)/arrayutilstest.out $(BUILD_DIR)/boundingboxtest.out $(BUILD_DIR)/mathutilstest.out $(BUILD_DIR)/fluidutilstest.out
+test: $(BUILD_DIR)/arrayutilstest.out $(BUILD_DIR)/tensorutilstest.out $(BUILD_DIR)/boundingboxtest.out $(BUILD_DIR)/mathutilstest.out $(BUILD_DIR)/fluidutilstest.out
 
 $(BUILD_DIR)/arrayutilstest.out: $(TEST_DIR)/arrayutilstest.cpp $(SRC_DIR)/arrayutils.hpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+	./$@
+
+$(BUILD_DIR)/tensorutilstest.out: $(TEST_DIR)/tensorutilstest.cpp $(SRC_DIR)/tensorutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
