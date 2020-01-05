@@ -23,6 +23,79 @@ inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& posi
     return flow_speed + translation_velocity;
 }
 
+static double strain_tensor_shear(const size_t i, const size_t j, const double shear_rate) {
+    if ((i == 0 && j == 2) || (i == 2 && j == 0)) {
+        return shear_rate * 0.5;
+    } else {
+        return 0;
+    }
+}
+
+static double stress_tensor_shear(const size_t i, const size_t j, const double shear_rate) {
+    if (i == 0 && j == 2) {
+        return shear_rate * 0.5;
+    } else if (i == 2 && j == 0) {
+        return -shear_rate * 0.5;
+    } else {
+        return 0;
+    }
+}
+
+static MathArray<double, 3> rotation_vector_shear(double shear_scaling) {
+    return MathArray<double, 3>{0, 0.5 * shear_scaling, 0};
+}
+
+// Assumes shear flow of form (az, 0, 0).
+inline MathArray<double, 3> shear_flow_at(const MathArray<double, 3>& position,
+                                          const MathArray<double, 3>& sphere_position,
+                                          const double sphere_radius,
+                                          const double shear_rate) {
+
+    const MathArray<double, 3> new_coords = position - sphere_position;
+    const double distance = magnitude(new_coords);
+
+    const auto x = new_coords;
+    const auto r = distance;
+    const auto a = sphere_radius;
+
+    if (distance < sphere_radius) {
+        return MathArray<double, 3>{0, 0, 0};
+    }
+
+    MathArray<double, 3> flow_speed{0, 0, 0};
+
+    for (int i = 0; i < 3; ++i) {
+        double term_1 = 0;
+        double term_2 = 0;
+        double term_3 = 0;
+
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                const double strain_tensor_value = strain_tensor_shear(j, k, shear_rate);
+
+
+                if (strain_tensor_value != 0) {
+                    term_1 -= 2.5 * std::pow(a, 3) / std::pow(r, 5) * x[i] * x[j] * x[k] * strain_tensor_value;
+
+                    const double factor = 0.5 * std::pow(a / r, 5) * strain_tensor_value;
+                    term_2 -= factor * (delta(i, j) * x[k] + delta(i, k) * x[j]);
+                    term_3 += factor * 5 * x[i] * x[j] * x[k] / std::pow(r, 2);
+                }
+            }
+        }
+
+        flow_speed[i] += term_1 + term_2 + term_3;
+    }
+
+    const MathArray<double, 3> rotation_vector = rotation_vector_shear(shear_rate);
+    flow_speed -= rotation_vector.cross(new_coords) * std::pow(sphere_radius / distance, 3);
+
+    // What's the shearing in the sphere's rest frame?
+    flow_speed += translating_flow_at(position, sphere_position, MathArray<double, 3>{shear_rate * position[2]}, sphere_radius);
+
+    return flow_speed;
+}
+
 inline MathArray<double, 3> stokes_drag(const MathArray<double, 3>& velocity, const double shear_viscosity, const double radius) {
     return (6 * M_PI * shear_viscosity * radius) * velocity;
 }

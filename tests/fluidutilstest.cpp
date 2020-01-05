@@ -1,5 +1,6 @@
 #include <functional>
 #include <iostream>
+#include <sstream>
 
 #include "fluidutils.hpp"
 #include "testutils.hpp"
@@ -113,8 +114,48 @@ void test_translation() {
     }
 }
 
+void test_shear() {
+    const MathArray<double, 3> sphere_position{0, 0, 10};
+    const double shear_rate = 1;
+    const double radius = 1;
+
+    // Test 1: zero radius
+    {
+        const MathArray<double, 3> pos{1, 2, 3};
+        const MathArray<double, 3> shear_flow = shear_flow_at(pos, sphere_position, 0, shear_rate);
+        assert_all_eq(shear_flow, MathArray<double, 3>{shear_rate * pos[2], 0, 0}, "Failed shear test 1");
+    }
+
+    // // Test 2: non-slip boundary
+    // {
+    //     const MathArray<double, 3> unperturbed_velocity{0, 1, 0};
+    //
+    //     for (size_t index = 0; index < 3; ++index) {
+    //         for (int plusminus : MathArray<int, 2>{+1, -1}) {
+    //             MathArray<double, 3> surface_point(sphere_position);
+    //             surface_point[index] += plusminus * radius;
+    //
+    //             std::cout << std::endl << "=== Testing at " << (plusminus > 0 ? "+" : "-") << index << " ===" << std::endl;
+    //             const auto flow = shear_flow_at(surface_point, sphere_position, radius, shear_rate);
+    //
+    //             std::stringstream ss;
+    //             ss << "Failed non-slip surface condition for ";
+    //             ss << (plusminus > 0 ? "+" : "-");
+    //             ss << index;
+    //             const std::string err_msg = ss.str();
+    //
+    //
+    //             if(!(all(abs(flow) < 1e-12))){
+    //                 std::cout << err_msg << std::endl;
+    //             }
+    //         }
+    //     }
+    // }
+}
+
 int main() {
     test_stokes_drag();
     test_blake();
     test_translation();
+    test_shear();
 }
