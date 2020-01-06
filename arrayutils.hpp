@@ -189,6 +189,17 @@ public:
             return MathArray<T, N>{};
         }
     }
+
+    template <class U>
+    MathArray<U, N> astype() const {
+        MathArray<U, N> output{};
+
+        for (size_t i = 0; i < 3; ++i) {
+            output[i] = (U) (*this)[i];
+        }
+
+        return output;
+    }
 };
 
 

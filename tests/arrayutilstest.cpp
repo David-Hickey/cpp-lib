@@ -352,6 +352,18 @@ void test_add_index() {
     assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, -13+set2, 5}, "Failed set lvalue");
 }
 
+void test_astype() {
+    MathArray<double, 4> a1{1.5, 1.0, -1.0, 0.0};
+    MathArray<long double, 4> a2{1.5L, 1.0L, -1.0L, 0.0L};
+    MathArray<int, 4> a3{1, 1, -1, 0};
+    MathArray<bool, 4> a4{true, true, true, false};
+
+    assert_all_eq(a1.astype<int>(), a3, "Failed cast to int");
+    assert_all_eq(a1.astype<long double>(), a2, "Failed cast to long double");
+    assert_all_eq(a1.astype<double>(), a1, "Failed cast to double");
+    assert_all_eq(a1.astype<bool>(), a4, "Failed cast to bool");
+}
+
 int main() {
     test_any();
     test_all();
@@ -380,6 +392,8 @@ int main() {
     test_add_index();
 
     test_dot_cross();
+
+    test_astype();
 
     return 0;
 }
