@@ -4,7 +4,11 @@
 
 #include <functional>
 
-inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& position, const MathArray<double, 3>& sphere_position, const MathArray<double, 3>& translation_velocity, const double sphere_radius) {
+inline MathArray<double, 3> translating_flow_at(const MathArray<double, 3>& position,
+                                                const MathArray<double, 3>& sphere_position,
+                                                const MathArray<double, 3>& translation_velocity,
+                                                const double sphere_radius) {
+
     const MathArray<double, 3> new_coords = position - sphere_position;
     const double distance = magnitude(new_coords);
 
@@ -117,7 +121,13 @@ static inline MathArray<double, 3> transform_position(const MathArray<double, 3>
     return position.copy_add_index(2, -zmin);
 }
 
-inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const double z_min, const double shear_viscosity, const bool include_translation_terms=true) {
+inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position,
+                                            const MathArray<double, 3>& real_sphere_location,
+                                            const MathArray<double, 3>& force,
+                                            const double z_min,
+                                            const double shear_viscosity,
+                                            const bool include_translation_terms=true) {
+
     const MathArray<double, 3> transformed_position = transform_position(position, z_min);
     const MathArray<double, 3> transformed_sphere_position = transform_position(real_sphere_location, z_min);
 
@@ -171,6 +181,11 @@ inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position
     return flow_speed;
 }
 
-inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position, const MathArray<double, 3>& real_sphere_location, const MathArray<double, 3>& force, const BoundingBox& bb, const double shear_viscosity) {
+inline MathArray<double, 3> blake_tensor_at(const MathArray<double, 3>& position,
+                                            const MathArray<double, 3>& real_sphere_location,
+                                            const MathArray<double, 3>& force,
+                                            const BoundingBox& bb,
+                                            const double shear_viscosity) {
+
     return blake_tensor_at(position, real_sphere_location, force, bb.get_zmin(), shear_viscosity);
 }
