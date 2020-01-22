@@ -382,6 +382,14 @@ void test_astype() {
     assert_all_eq(a1.astype<bool>(), a4, "Failed cast to bool");
 }
 
+void test_contains() {
+    MathArray<int, 3> a1{1, 2, 3};
+
+    assert(a1.contains(1), "Failed contains test");
+    assert(!a1.contains(0), "Failed contains test");
+    assert(!a1.contains(-1), "Failed contains test");
+}
+
 int main() {
     test_any();
     test_all();
@@ -412,6 +420,8 @@ int main() {
     test_dot_cross();
 
     test_astype();
+
+    test_contains();
 
     return 0;
 }

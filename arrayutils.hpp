@@ -200,6 +200,16 @@ public:
 
         return output;
     }
+
+    bool contains(const T& other) {
+        for (const auto v : *this) {
+            if (other == v) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 };
 
 
