@@ -327,6 +327,15 @@ void test_set() {
     // lvalue set test
     assert_all_eq(a1.set(3, set2), MathArray<int, 5>{1, 2, 3, set2, 5}, "Failed set lvalue");
     assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, set2, 5}, "Failed set lvalue");
+
+    // Multiple set test
+    assert_all_eq(a1.set(0, 0).set(1, -1).set(2, -2), MathArray<int, 5>{0, -1, -2, set2, 5}, "Failed multiple set test 1");
+    assert_all_eq(a1, MathArray<int, 5>{0, -1, -2, set2, 5}, "Failed multiple set test 1");
+
+    // And using lvalues...
+    int addition = -100;
+    assert_all_eq(a1.set(0, addition).set(1, addition).set(2, addition), MathArray<int, 5>{addition, addition, addition, set2, 5}, "Failed multiple lvalue set test");
+    assert_all_eq(a1, MathArray<int, 5>{addition, addition, addition, set2, 5}, "Failed multiple lvalue set test");
 }
 
 void test_add_index() {
@@ -350,6 +359,15 @@ void test_add_index() {
     // lvalue set test
     assert_all_eq(a1.add_index(3, set2), MathArray<int, 5>{1, 2, 3, -13+set2, 5}, "Failed set lvalue");
     assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, -13+set2, 5}, "Failed set lvalue");
+
+    // Multiple add test
+    assert_all_eq(a1.add_index(0, 100).add_index(1, 100).add_index(2, 100), MathArray<int, 5>{101, 102, 103, -13+set2, 5}, "Failed multiple add test");
+    assert_all_eq(a1, MathArray<int, 5>{101, 102, 103, -13+set2, 5}, "Failed multiple add test");
+
+    // And using lvalues...
+    int addition = -100;
+    assert_all_eq(a1.add_index(0, addition).add_index(1, addition).add_index(2, addition), MathArray<int, 5>{1, 2, 3, -13+set2, 5}, "Failed multiple lvalue add test");
+    assert_all_eq(a1, MathArray<int, 5>{1, 2, 3, -13+set2, 5}, "Failed multiple lvalue add test");
 }
 
 void test_astype() {
