@@ -124,13 +124,13 @@ public:
         return output;
     }
 
-    MathArray<T, N> set(const size_t index, const T&& value) {
+    MathArray<T, N>& set(const size_t index, const T&& value) {
         this->data[index] = value;
 
         return *this;
     }
 
-    MathArray<T, N> set(const size_t index, const T& value) {
+    MathArray<T, N>& set(const size_t index, const T& value) {
         this->data[index] = value;
 
         return *this;
@@ -146,13 +146,13 @@ public:
         return output.set(index, value);
     }
 
-    MathArray<T, N> add_index(const size_t index, const T&& value) {
+    MathArray<T, N>& add_index(const size_t index, const T&& value) {
         this->data[index] += value;
 
         return *this;
     }
 
-    MathArray<T, N> add_index(const size_t index, const T& value) {
+    MathArray<T, N>& add_index(const size_t index, const T& value) {
         this->data[index] += value;
 
         return *this;
