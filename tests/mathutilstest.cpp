@@ -1,5 +1,6 @@
 #include "mathutils.hpp"
 #include "testutils.hpp"
+#include<iostream>
 
 void test_flatten() {
     const int bins_x = 13;
@@ -51,9 +52,21 @@ void test_levicevita() {
     }
 }
 
+void test_pow() {
+    assert(square(5) == 25, "Failed square test");
+    assert(square(-5) == 25, "Failed square test");
+
+    assert(cube(7) == 343, "Failed cube test");
+    assert(cube(-7) == -343, "Failed cube test");
+
+    assert(power<int, 4>(3) == 81, "Failed arbitrary power test");
+    assert(power<int, 4>(-3) == 81, "Failed arbitrary power test");
+}
+
 
 int main() {
     test_delta();
     test_levicevita();
     test_flatten();
+    test_pow();
 }
