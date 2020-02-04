@@ -45,3 +45,16 @@ public:
         return (*this)[i];
     }
 };
+
+template <class T, size_t N, size_t M>
+Tensor<T, N, M> from_array(const T arr[N][M]) {
+    Tensor<T, N, M> out{};
+
+    for (size_t i = 0; i < N; ++i) {
+        for (size_t j = 0; j < M; ++j) {
+            out[{i, j}] = arr[i][j];
+        }
+    }
+
+    return out;
+}
