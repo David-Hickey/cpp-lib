@@ -98,33 +98,7 @@ void test_access() {
         assert(t.at(1)[0] == 49, "Failed const access test");
         assert(t.at(1)[1] == 409, "Failed const access test");
     }
-
 }
-
-// void test_flat() {
-//     Tensor<int, 2, 3> t{1, 2, 3,
-//                         4, 5, 6};
-//
-//     FlatTensor f = t.flat();
-//
-//
-//     for (size_t i = 0; i < 6; ++i) {
-//         assert(f[i] == i + 1, "Failed flat access");
-//
-//         f[i] = -f[i];
-//     }
-//
-//     for (size_t i = 0; i < 6; ++i) {
-//         assert(-f[i] == i + 1, "Failed flat setting");
-//     }
-//
-//     const Tensor<int, 1, 1> t1{1};
-//     const FlatTensor f1 = t.flat();
-//
-//     assert(f1[0] == 1, "Const flat access failed");
-//
-//     t[1][1] = t1[0][0];
-// }
 
 void test_from_array() {
     int arr[2][3] = {
