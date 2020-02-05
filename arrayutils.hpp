@@ -201,7 +201,7 @@ public:
         return output;
     }
 
-    bool contains(const T& other) {
+    bool contains(const T& other) const {
         for (const auto v : *this) {
             if (other == v) {
                 return true;
