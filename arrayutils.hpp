@@ -221,16 +221,6 @@ public:
 
 template<class T, size_t N>
 inline std::ostream& operator<< (std::ostream& out, const MathArray<T, N>& v) {
-    out << "(";
-
-    for (size_t i = 0; i < N - 1; ++i) {
-        out << v[i] << ", ";
-    }
-
-    out << v[N - 1] << ")";
-
-template<class T, size_t N>
-inline std::ostream& operator<< (std::ostream& out, const MathArray<T, N>& v) {
     if constexpr (N == 0) {
         out << "()";
         return out;
