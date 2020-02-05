@@ -13,11 +13,11 @@ class MathArray {
 public:
     T data[N];
 
-    T& operator[](size_t i) {
+    constexpr T& operator[](size_t i) noexcept {
         return this->data[i];
     }
 
-    const T& operator[](size_t i) const {
+    constexpr const T& operator[](size_t i) const noexcept {
         return this->data[i];
     }
 
@@ -37,51 +37,59 @@ public:
         return this->data[i];
     }
 
-    T* begin() {
+    constexpr T* begin() noexcept {
         return std::begin(this->data);
     }
 
-    T* end() {
+    constexpr T* end() noexcept {
         return std::end(this->data);
     }
 
-    const T* begin() const {
+    constexpr const T* begin() const noexcept {
         return std::begin(this->data);
     }
 
-    const T* end() const {
+    constexpr const T* end() const noexcept {
         return std::end(this->data);
     }
 
-    T& front() {
+    constexpr T& front() noexcept {
+        static_assert(N > 0, "No data in 0-length array");
+
         return this->data[0];
     }
 
-    T& back() {
+    constexpr T& back() noexcept {
+        static_assert(N > 0, "No data in 0-length array");
+
         return this->data[N - 1];
     }
 
-    const T& front() const {
+    constexpr const T& front() const noexcept {
+        static_assert(N > 0, "No data in 0-length array");
+
         return this->data[0];
     }
 
-    const T& back() const {
+    constexpr const T& back() const noexcept {
+        static_assert(N > 0, "No data in 0-length array");
+
         return this->data[N - 1];
     }
 
-    size_t size() const {
+    constexpr size_t size() const noexcept {
         return N;
     }
 
-    size_t max_size() const {
+    constexpr size_t max_size() const noexcept {
         return N;
     }
 
-    bool empty() const {
+    constexpr bool empty() const noexcept {
         return N == 0;
     }
 
-    T sum() const {
+    constexpr T sum() const noexcept {
         T output = 0;
         for (const T& t : *this) {
             output += t;
@@ -90,7 +98,7 @@ public:
         return output;
     }
 
-    MathArray<T, N> cumsum() const {
+    constexpr MathArray<T, N> cumsum() const noexcept {
         MathArray<T, N> output{};
 
         T running_total = 0;
@@ -102,7 +110,7 @@ public:
         return output;
     }
 
-    T prod() const {
+    constexpr T prod() const noexcept {
         T output = 1;
 
         for (const T& t : *this) {
@@ -112,7 +120,7 @@ public:
         return output;
     }
 
-    MathArray<T, N> cumprod() const {
+    constexpr MathArray<T, N> cumprod() const noexcept {
         MathArray<T, N> output{};
 
         T running_total = 1;
@@ -124,74 +132,72 @@ public:
         return output;
     }
 
-    MathArray<T, N>& set(const size_t index, const T&& value) {
+    constexpr MathArray<T, N>& set(const size_t index, const T&& value) noexcept {
         this->data[index] = value;
 
         return *this;
     }
 
-    MathArray<T, N>& set(const size_t index, const T& value) {
+    constexpr MathArray<T, N>& set(const size_t index, const T& value) noexcept {
         this->data[index] = value;
 
         return *this;
     }
 
-    MathArray<T, N> copy_set(const size_t index, const T& value) const {
+    constexpr MathArray<T, N> copy_set(const size_t index, const T& value) const noexcept {
         MathArray<T, N> output(*this);
         return output.set(index, value);
     }
 
-    MathArray<T, N> copy_set(const size_t index, const T&& value) const {
+    constexpr MathArray<T, N> copy_set(const size_t index, const T&& value) const noexcept {
         MathArray<T, N> output(*this);
         return output.set(index, value);
     }
 
-    MathArray<T, N>& add_index(const size_t index, const T&& value) {
+    constexpr MathArray<T, N>& add_index(const size_t index, const T&& value) noexcept {
         this->data[index] += value;
 
         return *this;
     }
 
-    MathArray<T, N>& add_index(const size_t index, const T& value) {
+    constexpr MathArray<T, N>& add_index(const size_t index, const T& value) noexcept {
         this->data[index] += value;
 
         return *this;
     }
 
-    MathArray<T, N> copy_add_index(const size_t index, const T& value) const {
+    constexpr MathArray<T, N> copy_add_index(const size_t index, const T& value) const noexcept {
         MathArray<T, N> output(*this);
         return output.add_index(index, value);
     }
 
-    MathArray<T, N> copy_add_index(const size_t index, const T&& value) const {
+    constexpr MathArray<T, N> copy_add_index(const size_t index, const T&& value) const noexcept {
         MathArray<T, N> output(*this);
         return output.add_index(index, value);
     }
 
-    T dot(const MathArray<T, N>& other) const {
+    constexpr T dot(const MathArray<T, N>& other) const noexcept {
         return ((*this) * other).sum();
     }
 
-    MathArray<T, N> cross(const MathArray<T, N>& other) const {
-        if (N == 3) {
-            MathArray<T, N> output{};
+    constexpr MathArray<T, N> cross(const MathArray<T, N>& other) const noexcept {
+        static_assert(N == 3, "Can only cross 3-vectors");
 
-            for (size_t i = 0; i < N; ++i) {
-                for (size_t j = 0; j < N; ++j) {
-                    for (size_t k = 0; k < N; ++k) {
-                        output[i] += levicevita(i, j, k) * (*this)[j] * other[k];
-                    }
+        MathArray<T, N> output{};
+
+        for (size_t i = 0; i < N; ++i) {
+            for (size_t j = 0; j < N; ++j) {
+                for (size_t k = 0; k < N; ++k) {
+                    output[i] += levicevita(i, j, k) * (*this)[j] * other[k];
                 }
             }
-
-            return output;
-        } else {
-            return MathArray<T, N>{};
         }
+
+        return output;
     }
 
     template <class U>
-    MathArray<U, N> astype() const {
+    constexpr MathArray<U, N> astype() const noexcept {
         MathArray<U, N> output{};
 
         for (size_t i = 0; i < N; ++i) {
@@ -201,7 +207,7 @@ public:
         return output;
     }
 
-    bool contains(const T& other) const {
+    constexpr bool contains(const T& other) const noexcept {
         for (const auto v : *this) {
             if (other == v) {
                 return true;
@@ -223,7 +229,22 @@ inline std::ostream& operator<< (std::ostream& out, const MathArray<T, N>& v) {
 
     out << v[N - 1] << ")";
 
-    return out;
+template<class T, size_t N>
+inline std::ostream& operator<< (std::ostream& out, const MathArray<T, N>& v) {
+    if constexpr (N == 0) {
+        out << "()";
+        return out;
+    } else {
+        out << "(";
+
+        for (size_t i = 0; i < N - 1; ++i) {
+            out << v[i] << ", ";
+        }
+
+        out << v[N - 1] << ")";
+
+        return out;
+    }
 }
 
 
@@ -231,7 +252,7 @@ inline std::ostream& operator<< (std::ostream& out, const MathArray<T, N>& v) {
  * ARITHMETIC OPERATIONS * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -242,7 +263,7 @@ inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const Mat
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -253,12 +274,12 @@ inline constexpr MathArray<T, N> operator+ (const MathArray<T, N>& a1, const T& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator+ (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator+ (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 + a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -269,7 +290,7 @@ inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const Mat
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -280,7 +301,7 @@ inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1, const T& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator- (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator- (const T& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -291,7 +312,7 @@ inline constexpr MathArray<T, N> operator- (const T& a1, const MathArray<T, N>& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -302,7 +323,7 @@ inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const Mat
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -313,12 +334,12 @@ inline constexpr MathArray<T, N> operator* (const MathArray<T, N>& a1, const T& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator* (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator* (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 * a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -329,7 +350,7 @@ inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const Mat
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -340,7 +361,7 @@ inline constexpr MathArray<T, N> operator/ (const MathArray<T, N>& a1, const T& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator/ (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator/ (const T& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -351,7 +372,7 @@ inline constexpr MathArray<T, N> operator/ (const T& a1, const MathArray<T, N>& 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] += a2[i];
     }
@@ -360,7 +381,7 @@ inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const MathArra
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const T& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] += a2;
     }
@@ -369,7 +390,7 @@ inline constexpr MathArray<T, N> operator+= (MathArray<T, N>& a1, const T& a2) {
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] -= a2[i];
     }
@@ -378,7 +399,7 @@ inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const MathArra
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const T& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] -= a2;
     }
@@ -387,7 +408,7 @@ inline constexpr MathArray<T, N> operator-= (MathArray<T, N>& a1, const T& a2) {
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] *= a2[i];
     }
@@ -396,7 +417,7 @@ inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const MathArra
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const T& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] *= a2;
     }
@@ -405,7 +426,7 @@ inline constexpr MathArray<T, N> operator*= (MathArray<T, N>& a1, const T& a2) {
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] /= a2[i];
     }
@@ -414,7 +435,7 @@ inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const MathArra
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const T& a2) noexcept {
     for (size_t i = 0; i < N; ++i) {
         a1[i] /= a2;
     }
@@ -423,7 +444,7 @@ inline constexpr MathArray<T, N> operator/= (MathArray<T, N>& a1, const T& a2) {
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1) {
+inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -434,7 +455,7 @@ inline constexpr MathArray<T, N> operator- (const MathArray<T, N>& a1) {
 }
 
 template<class T, size_t N>
-inline constexpr double magnitude_sq(const MathArray<T, N>& v) {
+inline constexpr double magnitude_sq(const MathArray<T, N>& v) noexcept {
     double total = 0;
 
     for (size_t i = 0; i < N; ++i) {
@@ -445,17 +466,17 @@ inline constexpr double magnitude_sq(const MathArray<T, N>& v) {
 }
 
 template<class T, size_t N>
-inline constexpr double magnitude(const MathArray<T, N>& v) {
+inline constexpr double magnitude(const MathArray<T, N>& v) noexcept {
     return std::sqrt(magnitude_sq<T, N>(v));
 }
 
 template<class T, size_t N>
-inline constexpr double distance_between_sq(const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr double distance_between_sq(const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     return magnitude_sq(a1 - a2);
 }
 
 template<class T, size_t N>
-inline constexpr double distance_between(const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr double distance_between(const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     return magnitude(a1 - a2);
 }
 
@@ -464,7 +485,7 @@ inline constexpr double distance_between(const MathArray<T, N>& a1, const MathAr
  * COMPARISON OPERATIONS * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -475,7 +496,7 @@ inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -486,7 +507,7 @@ inline constexpr MathArray<bool, N> operator< (const MathArray<T, N>& a1, const 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -497,7 +518,7 @@ inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -508,12 +529,12 @@ inline constexpr MathArray<bool, N> operator> (const MathArray<T, N>& a1, const 
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator> (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator> (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 < a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -524,12 +545,12 @@ inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator< (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator< (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 > a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -540,7 +561,7 @@ inline constexpr MathArray<bool, N> operator<= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -551,7 +572,7 @@ inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -562,17 +583,17 @@ inline constexpr MathArray<bool, N> operator>= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator<= (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator<= (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 >= a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator>= (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator>= (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 <= a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -583,7 +604,7 @@ inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -594,12 +615,12 @@ inline constexpr MathArray<bool, N> operator== (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator== (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator== (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 == a1;
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -610,7 +631,7 @@ inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const T& a2) {
+inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const T& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -621,7 +642,7 @@ inline constexpr MathArray<bool, N> operator!= (const MathArray<T, N>& a1, const
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<bool, N> operator!= (const T& a1, const MathArray<T, N>& a2) {
+inline constexpr MathArray<bool, N> operator!= (const T& a1, const MathArray<T, N>& a2) noexcept {
     return a2 != a1;
 }
 
@@ -630,7 +651,7 @@ inline constexpr MathArray<bool, N> operator!= (const T& a1, const MathArray<T, 
  * BOOLEAN OPERATIONS  * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 template<size_t N>
-inline constexpr MathArray<bool, N> operator&& (const MathArray<bool, N>& a1, const MathArray<bool, N>& a2) {
+inline constexpr MathArray<bool, N> operator&& (const MathArray<bool, N>& a1, const MathArray<bool, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -641,7 +662,7 @@ inline constexpr MathArray<bool, N> operator&& (const MathArray<bool, N>& a1, co
 }
 
 template<size_t N>
-inline constexpr MathArray<bool, N> operator|| (const MathArray<bool, N>& a1, const MathArray<bool, N>& a2) {
+inline constexpr MathArray<bool, N> operator|| (const MathArray<bool, N>& a1, const MathArray<bool, N>& a2) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -652,7 +673,7 @@ inline constexpr MathArray<bool, N> operator|| (const MathArray<bool, N>& a1, co
 }
 
 template<size_t N>
-inline constexpr MathArray<bool, N> operator! (const MathArray<bool, N>& a1) {
+inline constexpr MathArray<bool, N> operator! (const MathArray<bool, N>& a1) noexcept {
     MathArray<bool, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -663,7 +684,7 @@ inline constexpr MathArray<bool, N> operator! (const MathArray<bool, N>& a1) {
 }
 
 template<size_t N>
-inline constexpr bool all(const MathArray<bool, N>& a1) {
+inline constexpr bool all(const MathArray<bool, N>& a1) noexcept {
     for (const bool b : a1) {
         if (!b) {
             return false;
@@ -674,7 +695,7 @@ inline constexpr bool all(const MathArray<bool, N>& a1) {
 }
 
 template<size_t N>
-inline constexpr bool any(const MathArray<bool, N>& a1) {
+inline constexpr bool any(const MathArray<bool, N>& a1) noexcept {
     for (const bool b : a1) {
         if (b) {
             return true;
@@ -688,7 +709,7 @@ inline constexpr bool any(const MathArray<bool, N>& a1) {
  * MORE COMPLICATED FUNCTIONS  * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 template<class T, size_t N>
-inline constexpr MathArray<T, N> pow(const MathArray<T, N>& a1, const T& exponent) {
+inline constexpr MathArray<T, N> pow(const MathArray<T, N>& a1, const T& exponent) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
@@ -699,7 +720,7 @@ inline constexpr MathArray<T, N> pow(const MathArray<T, N>& a1, const T& exponen
 }
 
 template<class T, size_t N>
-inline constexpr MathArray<T, N> abs(const MathArray<T, N>& a1) {
+inline constexpr MathArray<T, N> abs(const MathArray<T, N>& a1) noexcept {
     MathArray<T, N> output{};
 
     for (size_t i = 0; i < N; ++i) {
