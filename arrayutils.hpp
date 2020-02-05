@@ -194,7 +194,7 @@ public:
     MathArray<U, N> astype() const {
         MathArray<U, N> output{};
 
-        for (size_t i = 0; i < 3; ++i) {
+        for (size_t i = 0; i < N; ++i) {
             output[i] = (U) (*this)[i];
         }
 
