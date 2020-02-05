@@ -116,7 +116,46 @@ void test_from_array() {
     }
 }
 
+void test_addition() {
+    const Tensor<int, 2, 3> t1{1, 2, 19,
+                               3, 4, 403};
+
+    const Tensor<int, 2, 3> t2{-1, 13, 4,
+                               24, 10, 0};
+
+    const Tensor<int, 2, 3> sum = t1 + t2;
+
+    for (size_t i = 0; i < 6; ++i) {
+        assert(sum.data[i] == t1.data[i] + t2.data[i], "Failed tensor addition");
+    }
+}
+
+void test_multiplication() {
+    const Tensor<int, 3, 2> t1{1,  2,
+                               19, 3,
+                               4,  403};
+
+    const Tensor<int, 2, 4> t2{-1, 13, 4, -6,
+                               24, 10, 0, 11};
+
+    const Tensor<int, 3, 4> prod = t1 * t2;
+
+    const int true_result[3][4] = {
+        {47, 33, 4, 16},
+        {53, 277, 76, -81},
+        {9668, 4082, 16, 4409}
+    };
+
+    for (size_t i = 0; i < 3; ++i) {
+        for (size_t j = 0; j < 4; ++j) {
+            assert(prod[{i, j}] == true_result[i][j], "Failed multiplication");
+        }
+    }
+}
+
 int main() {
     test_access();
     test_from_array();
+    test_addition();
+    test_multiplication();
 }

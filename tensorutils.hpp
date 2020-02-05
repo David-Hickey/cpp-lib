@@ -12,7 +12,7 @@ struct ConstRow {
     const Tensor<T, N, M>* tensor;
     const size_t index;
 
-    const T& operator[](const size_t i) const {
+    const T& operator[](const size_t i) const noexcept {
         return tensor->data[tensor->flatten(index, i)];
     }
 
@@ -30,11 +30,11 @@ struct Row {
     Tensor<T, N, M>* tensor;
     const size_t index;
 
-    T& operator[](const size_t i) {
+    T& operator[](const size_t i) noexcept {
         return tensor->data[tensor->flatten(index, i)];
     }
 
-    const T& operator[](const size_t i) const {
+    const T& operator[](const size_t i) const noexcept {
         return tensor->data[tensor->flatten(index, i)];
     }
 
@@ -62,13 +62,12 @@ class Tensor {
     friend class Row<T, N, M>;
     friend class ConstRow<T, N, M>;
 
-private:
-    size_t flatten(size_t i, size_t j) const {
+    static size_t flatten(size_t i, size_t j) noexcept {
         return i * M + j;
     }
 
-    size_t flatten(const Index& i) const {
-        return this->flatten(i.i, i.j);
+    static size_t flatten(const Index& i) noexcept {
+        return flatten(i.i, i.j);
     }
 
 public:
@@ -76,19 +75,19 @@ public:
 
     // 2 ways to access tensor data: with Index struct or using Row proxy
     // object.
-    T& operator[](const Index& i) {
+    T& operator[](const Index& i) noexcept {
         return this->data[this->flatten(i)];
     }
 
-    const T& operator[](const Index& i) const {
+    const T& operator[](const Index& i) const noexcept {
         return this->data[this->flatten(i)];
     }
 
-    Row<T, N, M> operator[](const size_t i) {
+    Row<T, N, M> operator[](const size_t i) noexcept {
         return Row<T, N, M>{this, i};
     }
 
-    ConstRow<T, N, M> operator[](const size_t i) const {
+    ConstRow<T, N, M> operator[](const size_t i) const noexcept {
         ConstRow<T, N, M> out{this, i};
 
         return out;
@@ -136,6 +135,32 @@ public:
         return this->data[this->flatten(i, j)];
     }
 };
+
+template <class T, size_t I, size_t J, size_t K>
+constexpr Tensor<T, I, J> operator*(const Tensor<T, I, K>& t1, const Tensor<T, K, J>& t2) noexcept {
+    Tensor<T, I, J> output{};
+
+    for (size_t i = 0; i < I; ++i) {
+        for (size_t j = 0; j < J; ++j) {
+            for (size_t k = 0; k < K; ++k) {
+                output[{i, j}] += t1[{i, k}] * t2[{k, j}];
+            }
+        }
+    }
+
+    return output;
+}
+
+template <class T, size_t I, size_t J>
+constexpr Tensor<T, I, J> operator+(const Tensor<T, I, J>& t1, const Tensor<T, I, J>& t2) noexcept {
+    Tensor<T, I, J> output{};
+
+    for (size_t i = 0; i < I * J; ++i) {
+        output.data[i] = t1.data[i] + t2.data[i];
+    }
+
+    return output;
+}
 
 template <class T, size_t N, size_t M>
 Tensor<T, N, M> from_array(const T arr[N][M]) {
