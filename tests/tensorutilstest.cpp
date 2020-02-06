@@ -101,17 +101,40 @@ void test_access() {
 }
 
 void test_from_array() {
-    int arr[2][3] = {
+    const int arr[2][3] = {
         {1, 2, 3},
         {4, 5, 6}
     };
 
-    Tensor<int, 2, 3> t = from_array<int, 2, 3>(arr);
+    const Tensor<int, 2, 3> t = from_array<int, 2, 3>(arr);
 
     for (size_t i = 0; i < 2; ++i){
         for (size_t j = 0; j < 3; ++j) {
             assert(t[{i, j}] == arr[i][j], "Failed from_array test");
             assert(t[i][j] == arr[i][j], "Failed from_array test");
+        }
+    }
+}
+
+void test_to_array() {
+    const Tensor<int, 2, 3> t{
+        1, 2, 3,
+        4, 5, 6
+    };
+
+    int a1[6];
+    t.to_array(a1);
+
+    int a2[2][3];
+    t.to_array(a2);
+
+    for (size_t i = 0; i < 6; ++i) {
+        assert(a1[i] == t.data[i], "Failed flat copy");
+    }
+
+    for (size_t i = 0; i < 2; ++i) {
+        for (size_t j = 0; j < 3; ++j) {
+            assert(a2[i][j] == t[{i, j}], "Failed 2D copy");
         }
     }
 }
@@ -156,6 +179,7 @@ void test_multiplication() {
 int main() {
     test_access();
     test_from_array();
+    test_to_array();
     test_addition();
     test_multiplication();
 }

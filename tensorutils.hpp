@@ -1,5 +1,8 @@
 #include <cstddef>
 #include <stdexcept>
+#include <algorithm>
+#include <iterator>
+
 
 template <class T, size_t N, size_t M> class Tensor;
 
@@ -134,6 +137,28 @@ public:
 
         return this->data[this->flatten(i, j)];
     }
+
+    /**
+      * Copy this tensor to a 2D row-major array. The weird syntax of the
+      * function signature prevents the array from decaying into a pointer,
+      * so this won't compile if you pass the wrong array size.
+      */
+    void to_array(T (&arr)[N][M]) const {
+        for (size_t i = 0; i < N; ++i) {
+            for (size_t j = 0; j < M; ++j) {
+                arr[i][j] = this->data[flatten(i, j)];
+            }
+        }
+    }
+
+    /**
+      * Copy this tensor to a 1D row-major array. The weird syntax of the
+      * function signature prevents the array from decaying into a pointer,
+      * so this won't compile if you pass the wrong array size.
+      */
+    void to_array(T (&arr)[N * M]) const {
+        std::copy(std::begin(this->data), std::end(this->data), arr);
+    }
 };
 
 template <class T, size_t I, size_t J, size_t K>
@@ -163,7 +188,7 @@ constexpr Tensor<T, I, J> operator+(const Tensor<T, I, J>& t1, const Tensor<T, I
 }
 
 template <class T, size_t N, size_t M>
-Tensor<T, N, M> from_array(const T arr[N][M]) {
+Tensor<T, N, M> from_array(const T (&arr)[N][M]) {
     Tensor<T, N, M> out{};
 
     for (size_t i = 0; i < N; ++i) {
