@@ -106,7 +106,7 @@ void test_from_array() {
         {4, 5, 6}
     };
 
-    const Tensor<int, 2, 3> t = from_array<int, 2, 3>(arr);
+    const Tensor<int, 2, 3> t = tensor_from_array<int, 2, 3>(arr);
 
     for (size_t i = 0; i < 2; ++i){
         for (size_t j = 0; j < 3; ++j) {
@@ -120,7 +120,7 @@ void test_from_array() {
         4, 5, 6
     };
 
-    const Tensor<int, 2, 3> t2 = from_array<int, 2, 3>(flatarr);
+    const Tensor<int, 2, 3> t2 = tensor_from_array<int, 2, 3>(flatarr);
 
     for (size_t i = 0; i < 2; ++i){
         for (size_t j = 0; j < 3; ++j) {

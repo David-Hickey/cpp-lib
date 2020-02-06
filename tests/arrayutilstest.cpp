@@ -392,7 +392,7 @@ void test_contains() {
 
 void test_to_from_array() {
     const int arr[3] = {1, 2, 3};
-    const MathArray<int, 3> a1 = from_array(arr);
+    const MathArray<int, 3> a1 = matharray_from_array(arr);
 
     assert_all_eq(a1, {1, 2, 3}, "Failed from_array");
 

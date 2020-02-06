@@ -225,7 +225,7 @@ public:
 
 
 template <class T, size_t N>
-constexpr MathArray<T, N> from_array(const T (&arr)[N]) noexcept {
+constexpr MathArray<T, N> matharray_from_array(const T (&arr)[N]) noexcept {
     MathArray<T, N> out{};
 
     std::copy(std::begin(arr), std::end(arr), std::begin(out.data));
