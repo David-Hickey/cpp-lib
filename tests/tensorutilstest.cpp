@@ -114,6 +114,19 @@ void test_from_array() {
             assert(t[i][j] == arr[i][j], "Failed from_array test");
         }
     }
+
+    const int flatarr[6] = {
+        1, 2, 3,
+        4, 5, 6
+    };
+
+    const Tensor<int, 2, 3> t2 = from_array<int, 2, 3>(flatarr);
+
+    for (size_t i = 0; i < 2; ++i){
+        for (size_t j = 0; j < 3; ++j) {
+            assert(t[{i, j}] == flatarr[i * 3 + j], "Failed from_array test");
+        }
+    }
 }
 
 void test_to_array() {
