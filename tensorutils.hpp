@@ -144,13 +144,9 @@ public:
       * so this won't compile if you pass the wrong array size.
       */
     void to_array(T (&arr)[N][M]) const {
-        size_t index = 0;
+        T* begin = reinterpret_cast<T*>(arr);
 
-        for (size_t i = 0; i < N; ++i) {
-            for (size_t j = 0; j < M; ++j) {
-                arr[i][j] = this->data[index++];
-            }
-        }
+        std::copy(std::begin(this->data), std::end(this->data), begin);
     }
 
     /**
@@ -204,11 +200,11 @@ template <class T, size_t N, size_t M>
 Tensor<T, N, M> tensor_from_array(const T (&arr)[N][M]) {
     Tensor<T, N, M> out{};
 
-    for (size_t i = 0; i < N; ++i) {
-        for (size_t j = 0; j < M; ++j) {
-            out[{i, j}] = arr[i][j];
-        }
-    }
+    // We can do this because arr is a single contiguous block of memory.
+    const T* begin = reinterpret_cast<const T*>(arr);
+    const T* end = std::next(begin, N * M);
+
+    std::copy(begin, end, std::begin(out.data));
 
     return out;
 }
