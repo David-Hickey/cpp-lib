@@ -201,3 +201,12 @@ Tensor<T, N, M> from_array(const T (&arr)[N][M]) {
 
     return out;
 }
+
+template <class T, size_t N, size_t M>
+Tensor<T, N, M> from_array(const T (&arr)[N * M]) {
+    Tensor<T, N, M> out{};
+
+    std::copy(std::begin(arr), std::end(arr), std::begin(out.data));
+
+    return out;
+}
