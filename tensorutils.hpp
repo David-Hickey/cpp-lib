@@ -159,7 +159,7 @@ public:
       * so this won't compile if you pass the wrong array size.
       */
     void to_array(T (&arr)[N * M]) const {
-        std::copy(std::begin(this->data), std::end(this->data), arr);
+        std::copy(std::begin(this->data), std::end(this->data), std::begin(arr));
     }
 };
 
