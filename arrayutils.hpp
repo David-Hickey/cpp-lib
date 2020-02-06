@@ -6,6 +6,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <iterator>
+#include <algorithm>
 
 template<class T, size_t N>
 class MathArray {
@@ -216,7 +217,21 @@ public:
 
         return false;
     }
+
+    constexpr void to_array(T (&arr)[N]) const noexcept {
+        std::copy(std::begin(this->data), std::end(this->data), std::begin(arr));
+    }
 };
+
+
+template <class T, size_t N>
+constexpr MathArray<T, N> from_array(const T (&arr)[N]) noexcept {
+    MathArray<T, N> out{};
+
+    std::copy(std::begin(arr), std::end(arr), std::begin(out.data));
+
+    return out;
+}
 
 
 template<class T, size_t N>

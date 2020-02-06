@@ -390,6 +390,20 @@ void test_contains() {
     assert(!a1.contains(-1), "Failed contains test");
 }
 
+void test_to_from_array() {
+    const int arr[3] = {1, 2, 3};
+    const MathArray<int, 3> a1 = from_array(arr);
+
+    assert_all_eq(a1, {1, 2, 3}, "Failed from_array");
+
+    int arr2[3];
+    a1.to_array(arr2);
+
+    for (size_t i = 0; i < 3; ++i) {
+        assert(arr2[i] == i + 1, "Failed to_array");
+    }
+}
+
 int main() {
     test_any();
     test_all();
@@ -422,6 +436,8 @@ int main() {
     test_astype();
 
     test_contains();
+
+    test_to_from_array();
 
     return 0;
 }
