@@ -144,9 +144,11 @@ public:
       * so this won't compile if you pass the wrong array size.
       */
     void to_array(T (&arr)[N][M]) const {
+        size_t index = 0;
+
         for (size_t i = 0; i < N; ++i) {
             for (size_t j = 0; j < M; ++j) {
-                arr[i][j] = this->data[flatten(i, j)];
+                arr[i][j] = this->data[index++];
             }
         }
     }
