@@ -189,6 +189,18 @@ void test_multiplication() {
     }
 }
 
+void test_astype() {
+    const Tensor<float, 3, 2> t1{1.5,  2,
+                                 19, 3.9,
+                                 4,  403};
+
+    const Tensor<int, 3, 2> t2 = t1.astype<int>();
+
+    for (size_t i = 0; i < 6; ++i) {
+        assert(int(t1.data[i]) == t2.data[i], "Failed astype cast");
+    }
+}
+
 int main() {
     test_access();
     test_from_array();

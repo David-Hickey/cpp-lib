@@ -161,6 +161,17 @@ public:
     void to_array(T (&arr)[N * M]) const {
         std::copy(std::begin(this->data), std::end(this->data), std::begin(arr));
     }
+
+    template <class U>
+    Tensor<U, N, M> astype() const {
+        Tensor<U, N, M> out{};
+
+        for (size_t i = 0; i < N * M; ++i) {
+            out.data[i] = (U) this->data[i];
+        }
+
+        return out;
+    }
 };
 
 template <class T, size_t I, size_t J, size_t K>
