@@ -144,9 +144,9 @@ public:
       * so this won't compile if you pass the wrong array size.
       */
     void to_array(T (&arr)[N][M]) const {
-        T* begin = reinterpret_cast<T*>(arr);
+        T (&flatarr)[N * M] = reinterpret_cast<T(&)[N * M]>(arr);
 
-        std::copy(std::begin(this->data), std::end(this->data), begin);
+        std::copy(std::begin(this->data), std::end(this->data), std::begin(flatarr));
     }
 
     /**
@@ -201,10 +201,9 @@ Tensor<T, N, M> tensor_from_array(const T (&arr)[N][M]) {
     Tensor<T, N, M> out{};
 
     // We can do this because arr is a single contiguous block of memory.
-    const T* begin = reinterpret_cast<const T*>(arr);
-    const T* end = std::next(begin, N * M);
+    const T (&flatarr)[N * M] = reinterpret_cast<const T(&)[N * M]>(arr);
 
-    std::copy(begin, end, std::begin(out.data));
+    std::copy(std::begin(flatarr), std::end(flatarr), std::begin(out.data));
 
     return out;
 }
