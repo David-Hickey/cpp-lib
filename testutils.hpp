@@ -4,9 +4,17 @@
 #include "arrayutils.hpp"
 
 
+struct assertion_exception : public std::runtime_error {
+
+	assertion_exception(const char* message) : std::runtime_error(message) {}
+    assertion_exception(const std::string& message) : std::runtime_error(message) {}
+
+};
+
+
 void assert(bool b, const std::string& msg="") {
     if (!b) {
-        throw std::runtime_error(msg);
+        throw assertion_exception(msg);
     }
 }
 
