@@ -6,6 +6,7 @@
 #include <limits>
 #include <string>
 #include <cstring>
+#include <cmath>
 
 
 inline constexpr int levicevita(const int i, const int j, const int k) {
@@ -36,6 +37,10 @@ inline constexpr T square(const T x) {
 template <class T>
 inline constexpr T cube(const T x) {
     return x * x * x;
+}
+
+inline constexpr double hypot(const double a, const double b) {
+    return std::sqrt(square(a) + square(b));
 }
 
 template <class T, int N>
