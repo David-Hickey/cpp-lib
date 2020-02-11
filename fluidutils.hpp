@@ -1,3 +1,5 @@
+#pragma once
+
 #include "arrayutils.hpp"
 #include "mathutils.hpp"
 #include "boundingbox.hpp"
