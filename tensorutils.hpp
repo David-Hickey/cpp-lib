@@ -1,4 +1,7 @@
 #pragma once
+
+
+#include "arrayutils.hpp"
 #include <cstddef>
 #include <stdexcept>
 #include <algorithm>
@@ -180,6 +183,20 @@ constexpr Tensor<T, I, J> operator*(const Tensor<T, I, K>& t1, const Tensor<T, K
             for (size_t k = 0; k < K; ++k) {
                 output[{i, j}] += t1[{i, k}] * t2[{k, j}];
             }
+        }
+    }
+
+    return output;
+}
+
+
+template <class T, size_t I, size_t K>
+constexpr MathArray<T, I> operator*(const Tensor<T, I, K>& t, const MathArray<T, K>& v) noexcept {
+    MathArray<T, I> output{};
+
+    for (size_t i = 0; i < I; ++i) {
+        for (size_t k = 0; k < K; ++k) {
+            output[i] += t[{i, k}] * v[k];
         }
     }
 

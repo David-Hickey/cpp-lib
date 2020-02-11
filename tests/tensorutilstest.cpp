@@ -1,5 +1,6 @@
 #include "tensorutils.hpp"
 #include "testutils.hpp"
+#include "arrayutils.hpp"
 
 void test_access() {
     {
@@ -186,6 +187,14 @@ void test_multiplication() {
         for (size_t j = 0; j < 4; ++j) {
             assert(prod[{i, j}] == true_result[i][j], "Failed multiplication");
         }
+    }
+
+    const MathArray<int, 2> v{17, 23};
+    const MathArray<int, 3> out_v = t1 * v;
+    const MathArray<int, 3> true_out_v{63, 392, 9337};
+
+    for (size_t i = 0; i < 3; ++i) {
+        assert(out_v[i] == true_out_v[i], "Failed multipliciation by vector");
     }
 }
 
