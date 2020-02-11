@@ -105,7 +105,7 @@ inline long convert(const std::string& s) {
         }
 
         if (std::strcmp(leftovers, s.c_str()) == 0) {
-            throw number_format_exception("Unknown error occured in int conversion");
+            throw number_format_exception("Unknown error occured in long conversion");
         }
     }
 
@@ -127,7 +127,7 @@ inline double convert(const std::string& s) {
         }
 
         if (std::strcmp(leftovers, s.c_str()) == 0) {
-            throw number_format_exception("Unknown error occured in int conversion");
+            throw number_format_exception("Unknown error occured in double conversion");
         }
     }
 
