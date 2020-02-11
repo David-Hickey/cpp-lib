@@ -63,10 +63,32 @@ void test_pow() {
     assert(power<int, 4>(-3) == 81, "Failed arbitrary power test");
 }
 
+void test_convert() {
+    assert(convert<int>("14") == 14, "Failed int conversion");
+    assert(convert<long>("14000000") == 14000000, "Failed long conversion");
+    assert(convert<double>("14.3") == 14.3, "Failed double conversion");
+
+    try {
+        const int i = convert<int>("hello");
+        std::cout << i << std::endl;
+
+        assert(false, "Failed int conversion checks");
+    } catch (number_format_exception&) {}
+    try {
+        const long l = convert<long>("hello");
+        assert(false, "Failed long conversion checks");
+    } catch (number_format_exception&) {}
+    try {
+        const double d = convert<double>("hello");
+        assert(false, "Failed double conversion checks");
+    } catch (number_format_exception&) {}
+}
+
 
 int main() {
     test_delta();
     test_levicevita();
     test_flatten();
     test_pow();
+    test_convert();
 }
