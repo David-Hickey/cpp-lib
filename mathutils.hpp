@@ -60,6 +60,11 @@ template <class T>
 inline T convert(const std::string& s);
 
 template <>
+inline std::string convert(const std::string& s) {
+    return s;
+}
+
+template <>
 inline int convert(const std::string& s) {
     char* leftovers;
     const long value = std::strtol(s.c_str(), &leftovers, 10);

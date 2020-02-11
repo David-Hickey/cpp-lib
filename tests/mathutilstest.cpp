@@ -82,6 +82,9 @@ void test_convert() {
         const double d = convert<double>("hello");
         assert(false, "Failed double conversion checks");
     } catch (number_format_exception&) {}
+
+
+    assert(convert<std::string>("blork") == "blork" , "Failed string conversion");
 }
 
 
