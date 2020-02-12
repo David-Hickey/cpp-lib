@@ -22,7 +22,7 @@ void test_stokes_drag() {
 
 std::function<MathArray<double, 3>(const MathArray<double, 3>&, const MathArray<double, 3>&)> curry_blake_tester(const BoundingBox& bb, const MathArray<double, 3> real_sphere_location, const double shear_viscosity) {
     return [=](const MathArray<double, 3>& position, const MathArray<double, 3>& force) {
-        return blake_tensor_at(position, real_sphere_location, force, bb, shear_viscosity);
+        return blake_flow_at(position, real_sphere_location, force, bb, shear_viscosity);
     };
 }
 
