@@ -392,8 +392,6 @@ void test_contains() {
 
     MathArray<double, 3> a2{1, std::numeric_limits<double>::quiet_NaN(), 0};
 
-    std::cout << a2 << std::endl;
-
     assert(a2.contains_nan(), "Failed nan contains test");
 }
 
