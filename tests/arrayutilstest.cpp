@@ -1,5 +1,6 @@
 #include "arrayutils.hpp"
 #include "testutils.hpp"
+#include <limits>
 
 void test_all() {
     assert(!all(MathArray<bool, 4>{false, false, false, true}));
@@ -388,6 +389,12 @@ void test_contains() {
     assert(a1.contains(1), "Failed contains test");
     assert(!a1.contains(0), "Failed contains test");
     assert(!a1.contains(-1), "Failed contains test");
+
+    MathArray<double, 3> a2{1, std::numeric_limits<double>::quiet_NaN(), 0};
+
+    std::cout << a2 << std::endl;
+
+    assert(a2.contains_nan(), "Failed nan contains test");
 }
 
 void test_to_from_array() {

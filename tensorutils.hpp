@@ -142,6 +142,16 @@ public:
         return this->data[this->flatten(i, j)];
     }
 
+    constexpr bool contains_nan() const noexcept {
+        for (const auto v : this->data) {
+            if (std::isnan(v)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
       * Copy this tensor to a 2D row-major array. The weird syntax of the
       * function signature prevents the array from decaying into a pointer,

@@ -218,6 +218,16 @@ public:
         return false;
     }
 
+    constexpr bool contains_nan() const noexcept {
+        for (const T v : this->data) {
+            if (std::isnan(v)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     constexpr void to_array(T (&arr)[N]) const noexcept {
         std::copy(std::begin(this->data), std::end(this->data), std::begin(arr));
     }

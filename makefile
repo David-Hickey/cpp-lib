@@ -6,7 +6,7 @@ SRC_DIR ?= .
 
 
 INC_FLAGS := -I.
-CXXFLAGS := $(INC_FLAGS) -Ofast -std=c++17
+CXXFLAGS := $(INC_FLAGS) -O3 -std=c++17
 
 .PHONY: test all clean
 
