@@ -77,8 +77,8 @@ void test_translation() {
         // Along symmetry axis
         const MathArray<double, 3> trans_middle = translating_flow_at(MathArray<double, 3>{x_offset, 0, z}, sphere_position, unperturbed_velocity, radius);
 
-        assert(trans_above[0] == trans_below[0] && trans_above[1] == -trans_below[1] && trans_above[2] == -trans_below[2], "Failed symmetry condition 1a");
-        assert(trans_middle[1] == 0 && trans_middle[2] == 0, "Failed symmetry condition 1c");
+        assert(std::abs(trans_above[0] - trans_below[0]) < 1e-16 && std::abs(trans_above[1]  + trans_below[1]) < 1e-16 && std::abs(trans_above[2] + trans_below[2]) < 1e-16, "Failed symmetry condition 1a");
+        assert(std::abs(trans_middle[1]) < 1e-16 && std::abs(trans_middle[2]) < 1e-16, "Failed symmetry condition 1c");
     }
 
     // Test 3: should be symmetric around flow axes regardless of which axis it is and how they are diametrically opposite.
@@ -93,8 +93,8 @@ void test_translation() {
         // Along symmetry axis
         const MathArray<double, 3> trans_middle = translating_flow_at(MathArray<double, 3>{0, y_offset, z}, sphere_position, unperturbed_velocity, radius);
 
-        assert(trans_above[0] == -trans_below[0] && trans_above[1] == trans_below[1] && trans_above[2] == -trans_below[2], "Failed symmetry condition 2a");
-        assert(trans_middle[0] == 0 && trans_middle[2] == 0, "Failed symmetry condition 2c");
+        assert(std::abs(trans_above[0] + trans_below[0]) < 1e-16 && std::abs(trans_above[1] - trans_below[1]) < 1e-16 && std::abs(trans_above[2] + trans_below[2]) < 1e-16, "Failed symmetry condition 2a");
+        assert(std::abs(trans_middle[0]) < 1e-16 && std::abs(trans_middle[2]) < 1e-16, "Failed symmetry condition 2c");
     }
 
     // Test 4: non-slip boundary
@@ -123,7 +123,7 @@ void test_shear() {
     {
         const MathArray<double, 3> pos{1, 2, 3};
         const MathArray<double, 3> shear_flow = shear_flow_at(pos, sphere_position, 0, shear_rate);
-        assert_all_eq(shear_flow, MathArray<double, 3>{shear_rate * pos[2], 0, 0}, "Failed shear test 1");
+        assert_all_approx_eq(shear_flow, MathArray<double, 3>{shear_rate * pos[2], 0, 0}, 1e-16, "Failed shear test 1");
     }
 
     // // Test 2: non-slip boundary
