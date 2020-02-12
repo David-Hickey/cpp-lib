@@ -144,7 +144,7 @@ public:
 
     constexpr bool contains_nan() const noexcept {
         #ifdef __FAST_MATH__
-        #warning "MathArray.contains_nan() will not work properly with -ffast-math"
+        #warning "Tensor.contains_nan() will not work properly with -ffast-math"
         #endif
 
         for (const auto v : this->data) {
