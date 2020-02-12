@@ -392,7 +392,9 @@ void test_contains() {
 
     MathArray<double, 3> a2{1, std::numeric_limits<double>::quiet_NaN(), 0};
 
+    #ifndef __FAST_MATH__
     assert(a2.contains_nan(), "Failed nan contains test");
+    #endif
 }
 
 void test_to_from_array() {

@@ -213,7 +213,9 @@ void test_astype() {
 void test_contains() {
     Tensor<double, 2, 2> t{1, std::numeric_limits<double>::quiet_NaN(), 0, 0};
 
+    #ifndef __FAST_MATH__
     assert(t.contains_nan(), "Failed nan contains test");
+    #endif
 }
 
 int main() {
