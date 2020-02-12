@@ -143,6 +143,10 @@ public:
     }
 
     constexpr bool contains_nan() const noexcept {
+        #ifdef __FAST_MATH__
+        #warning "MathArray.contains_nan() will not work properly with -ffast-math"
+        #endif
+
         for (const auto v : this->data) {
             if (std::isnan(v)) {
                 return true;
