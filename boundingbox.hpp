@@ -87,6 +87,31 @@ public:
         return this->lower_bounds;
     }
 
+    /**
+      * WEIGHTED BY SIZE OF SURFACE. In other words, a very elongated box would
+      * see most of the points picked on the long faces and very few on the
+      * small end faces.
+      */
+    inline MathArray<double, 3> random_point_on_surface(std::mt19937& engine) const {
+        // Surface areas...
+        const std::vector<double> surface_areas{
+            this->get_xsurface(), this->get_xsurface(), // surfaces with x normal
+            this->get_ysurface(), this->get_ysurface(), // surfaces with y normal
+            this->get_zsurface(), this->get_zsurface()  // surfaces with z normal
+        };
+        const size_t surface_index = weighted_index(surface_areas, engine);
+        const bool basis_index = surface_index / 2; // x=0, y=1, z=2.
+        const bool upper = (surface_index % 3) == 1; // 0 if lower, 1 if upper.
+
+        // Find a random point P in the box, then project it onto the chosen
+        // surface. This means setting P[basis_index] to be on the appropriate
+        // surface.
+        const MathArray<double, 3> surface_point = this->random_point_in_bounds(engine)
+            .copy_set(basis_index, upper ? this->upper_bounds[basis_index] : this->lower_bounds[basis_index]);
+
+        return surface_point;
+    }
+
     inline double get_xmin() const { return this->lower_bounds[0]; };
     inline double get_xmax() const { return this->upper_bounds[0]; };
     inline double get_ymin() const { return this->lower_bounds[1]; };
@@ -96,6 +121,9 @@ public:
     inline double get_xsize() const { return this->upper_bounds[0] - this->lower_bounds[0]; };
     inline double get_ysize() const { return this->upper_bounds[1] - this->lower_bounds[1]; };
     inline double get_zsize() const { return this->upper_bounds[2] - this->lower_bounds[2]; };
+    inline double get_xsurface() const { return this->get_ysize() * this->get_zsize(); }
+    inline double get_ysurface() const { return this->get_zsize() * this->get_xsize(); }
+    inline double get_zsurface() const { return this->get_xsize() * this->get_ysize(); }
 
 private:
     const MathArray<double, 3> lower_bounds;
