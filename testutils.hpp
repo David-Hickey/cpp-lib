@@ -31,3 +31,25 @@ void assert_all_approx_eq(const MathArray<T, N>& a1, const MathArray<T, N>& a2, 
         assert(std::abs(a1[i] - a2[i]) < tol, message);
     }
 }
+
+template <class T>
+void assert_all_eq(const std::vector<T>& a1, const std::vector<T>& a2, const std::string& message) {
+	if (a1.size() != a2.size()) {
+		throw assertion_exception(message);
+	}
+
+    for (size_t i = 0; i < a1.size(); ++i) {
+        assert(a1[i] == a2[i], message);
+    }
+}
+
+template <class T>
+void assert_all_approx_eq(const std::vector<T>& a1, const std::vector<T>& a2, const double tol, const std::string& message) {
+	if (a1.size() != a2.size()) {
+		throw assertion_exception(message);
+	}
+
+    for (size_t i = 0; i < a1.size(); ++i) {
+        assert(std::abs(a1[i] - a2[i]) < tol, message);
+    }
+}
