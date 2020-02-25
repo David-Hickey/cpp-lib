@@ -103,13 +103,43 @@ void test_random() {
     std::random_device dev;
     std::mt19937 engine(dev());
 
-    const BoundingBox bb(10, 20, 30);
+    {
+        const BoundingBox bb(10, 20, 30);
 
-    for (size_t i = 0; i < 1000; ++i) {
-        const MathArray<double, 3> random_point = bb.random_point_in_bounds(engine);
+        for (size_t i = 0; i < 1000; ++i) {
+            const MathArray<double, 3> random_point = bb.random_point_in_bounds(engine);
 
-        assert(bb.in_bounds(random_point), "Random point in bounds was out of bounds");
+            assert(bb.in_bounds(random_point), "Random point in bounds was out of bounds");
+        }
     }
+
+    {
+        const BoundingBox bb(1000, 10, 10);
+
+        const double area_ratio = bb.get_xsurface() / (bb.get_zsurface() + bb.get_ysurface());
+
+        double end_points = 0;
+        const int n = 100'000'000;
+        for (int i = 0; i < n; ++i) {
+            const auto pt = bb.random_point_on_surface(engine);
+
+            if (int(std::abs(pt[0])) == int(bb.get_xmax())) {
+                end_points ++;
+            }
+        }
+
+        const double injection_ratio = (end_points / n);
+
+        assert(std::abs((injection_ratio - area_ratio) / area_ratio) < 1e-2, "Failed surface injection");
+    }
+}
+
+void test_area() {
+    const BoundingBox bb(13, 17, 23);
+
+    assert(bb.get_xsurface() == 17*23);
+    assert(bb.get_ysurface() == 23*13);
+    assert(bb.get_zsurface() == 13*17);
 }
 
 int main() {
@@ -119,4 +149,6 @@ int main() {
     test_getters();
     test_constructors();
     test_random();
+    test_area();
+
 }
