@@ -235,6 +235,57 @@ public:
     constexpr void to_array(T (&arr)[N]) const noexcept {
         std::copy(std::begin(this->data), std::end(this->data), std::begin(arr));
     }
+
+    template <size_t M>
+    constexpr MathArray<T, N + M> insert(const size_t index, const MathArray<T, M>& insert) const noexcept {
+        MathArray<T, N + M> output{};
+
+        for (size_t i = 0; i < index; ++i) {
+            output[i] = (*this)[i];
+        }
+
+        for (size_t i = index; i < index + M; ++i) {
+            output[i] = insert[i - index];
+        }
+
+        for (size_t i = index + M; i < N + M; ++i) {
+            output[i] = (*this)[i - M];
+        }
+
+        return output;
+    }
+
+    constexpr MathArray<T, N + 1> insert(const size_t index, const T& insert) const noexcept {
+        MathArray<T, N + 1> output{};
+
+        for (size_t i = 0; i < index; ++i) {
+            output[i] = (*this)[i];
+        }
+
+        output[index] = insert;
+
+        for (size_t i = index + 1; i < N + 1; ++i) {
+            output[i] = (*this)[i - 1];
+        }
+
+        return output;
+    }
+
+    constexpr MathArray<T, N - 1> remove(const size_t index) const noexcept {
+        static_assert(N > 0, "Can't delete from length-zero array");
+
+        MathArray<T, N - 1> output{};
+
+        for (size_t i = 0; i < index; ++i) {
+            output[i] = (*this)[i];
+        }
+
+        for (size_t i = index; i < N - 1; ++i) {
+            output[i] = (*this)[i + 1];
+        }
+
+        return output;
+    }
 };
 
 

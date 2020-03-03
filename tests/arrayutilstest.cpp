@@ -411,6 +411,24 @@ void test_to_from_array() {
     }
 }
 
+void test_insert_delete_scalar() {
+    const MathArray<int, 5> a1{0, 1, 2, 3, 4};
+    const MathArray<int, 6> a1_insert = a1.insert(2, 26);
+    const MathArray<int, 4> a1_delete = a1.remove(3);
+
+    assert_all_eq(a1_insert, {0, 1, 26, 2, 3, 4}, "Failed scalar insert");
+    assert_all_eq(a1_delete, {0, 1, 2, 4}, "Failed scalar delete");
+}
+
+void test_insert_array() {
+    const MathArray<int, 5> a1{0, 1, 2, 3, 4};
+    const MathArray<int, 3> a2{27, 28, 29};
+
+    const MathArray<int, 8> insert = a1.insert(3, a2);
+
+    assert_all_eq(insert, {0, 1, 2, 27, 28, 29, 3, 4}, "Failed array insert");
+}
+
 int main() {
     test_any();
     test_all();
@@ -445,6 +463,9 @@ int main() {
     test_contains();
 
     test_to_from_array();
+
+    test_insert_delete_scalar();
+    test_insert_array();
 
     return 0;
 }
