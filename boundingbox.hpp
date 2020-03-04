@@ -1,7 +1,9 @@
 #pragma once
 
-#include <random>
 #include "arrayutils.hpp"
+#include "randomutils.hpp"
+
+#include <random>
 
 
 class BoundingBox {

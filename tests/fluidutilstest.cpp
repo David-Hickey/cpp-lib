@@ -1,9 +1,10 @@
+#include "fluidutils.hpp"
+#include "testutils.hpp"
+
 #include <functional>
 #include <iostream>
 #include <sstream>
 
-#include "fluidutils.hpp"
-#include "testutils.hpp"
 
 void test_stokes_drag() {
     const MathArray<double, 3> velocity{-1, 0, 0};

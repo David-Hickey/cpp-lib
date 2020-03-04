@@ -90,19 +90,10 @@ void test_convert() {
 }
 
 
-void test_cumsum() {
-    const std::vector<int> v =        {1, 2, 3,  5,  7, 11, 13};
-    const std::vector<int> v_cumsum = {1, 3, 6, 11, 18, 29, 42};
-
-    assert_all_eq(cumsum(v), v_cumsum, "Failed cumsum");
-}
-
-
 int main() {
     test_delta();
     test_levicevita();
     test_flatten();
     test_pow();
     test_convert();
-    test_cumsum();
 }
