@@ -12,7 +12,7 @@ CXXFLAGS := $(INC_FLAGS) -O3 -std=c++17
 
 all:
 
-test: $(BUILD_DIR)/arrayutilstest.out $(BUILD_DIR)/tensorutilstest.out $(BUILD_DIR)/boundingboxtest.out $(BUILD_DIR)/mathutilstest.out $(BUILD_DIR)/fluidutilstest.out
+test: $(BUILD_DIR)/arrayutilstest.out $(BUILD_DIR)/tensorutilstest.out $(BUILD_DIR)/boundingboxtest.out $(BUILD_DIR)/mathutilstest.out $(BUILD_DIR)/fluidutilstest.out $(BUILD_DIR)/randomutilstest.out
 
 $(BUILD_DIR)/arrayutilstest.out: $(TEST_DIR)/arrayutilstest.cpp $(SRC_DIR)/arrayutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
@@ -31,6 +31,10 @@ $(BUILD_DIR)/mathutilstest.out: $(TEST_DIR)/mathutilstest.cpp $(SRC_DIR)/mathuti
 	./$@
 
 $(BUILD_DIR)/fluidutilstest.out: $(TEST_DIR)/fluidutilstest.cpp $(SRC_DIR)/fluidutils.hpp
+	$(CXX) $(CXXFLAGS) $< -o $@
+	./$@
+
+$(BUILD_DIR)/randomutilstest.out: $(TEST_DIR)/randomutilstest.cpp $(SRC_DIR)/randomutils.hpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 	./$@
 
