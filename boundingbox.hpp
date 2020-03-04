@@ -5,6 +5,28 @@
 
 #include <random>
 
+template <class T, size_t N>
+inline constexpr MathArray<T, N> elementwise_min(const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
+    MathArray<T, N> output{};
+
+    for (size_t i = 0; i < N; ++i) {
+        output[i] = std::min(a1[i], a2[i]);
+    }
+
+    return output;
+}
+
+template <class T, size_t N>
+inline constexpr MathArray<T, N> elementwise_max(const MathArray<T, N>& a1, const MathArray<T, N>& a2) noexcept {
+    MathArray<T, N> output{};
+
+    for (size_t i = 0; i < N; ++i) {
+        output[i] = std::max(a1[i], a2[i]);
+    }
+
+    return output;
+}
+
 
 class BoundingBox {
 
@@ -16,6 +38,10 @@ public:
     BoundingBox(const double x_dim, const double y_dim, const double z_dim)
     : lower_bounds{-x_dim / 2.0, -y_dim / 2.0, -z_dim / 2.0}
     , upper_bounds{+x_dim / 2.0, +y_dim / 2.0, +z_dim / 2.0} {}
+
+    BoundingBox(const MathArray<double, 3>& corner_1, const MathArray<double, 3>& corner_2)
+    : lower_bounds(elementwise_min(corner_1, corner_2))
+    , upper_bounds(elementwise_max(corner_1, corner_2)) {}
 
     BoundingBox(const BoundingBox& other)
     : lower_bounds(other.get_lower_bounds())
@@ -114,15 +140,16 @@ public:
         return surface_point;
     }
 
+    inline double get_ith_size(const size_t i) const { return this->upper_bounds[i] - this->lower_bounds[i]; };
     inline double get_xmin() const { return this->lower_bounds[0]; };
     inline double get_xmax() const { return this->upper_bounds[0]; };
     inline double get_ymin() const { return this->lower_bounds[1]; };
     inline double get_ymax() const { return this->upper_bounds[1]; };
     inline double get_zmin() const { return this->lower_bounds[2]; };
     inline double get_zmax() const { return this->upper_bounds[2]; };
-    inline double get_xsize() const { return this->upper_bounds[0] - this->lower_bounds[0]; };
-    inline double get_ysize() const { return this->upper_bounds[1] - this->lower_bounds[1]; };
-    inline double get_zsize() const { return this->upper_bounds[2] - this->lower_bounds[2]; };
+    inline double get_xsize() const { return this->get_ith_size(0); };
+    inline double get_ysize() const { return this->get_ith_size(1); };
+    inline double get_zsize() const { return this->get_ith_size(2); };
     inline double get_xsurface() const { return this->get_ysize() * this->get_zsize(); }
     inline double get_ysurface() const { return this->get_zsize() * this->get_xsize(); }
     inline double get_zsurface() const { return this->get_xsize() * this->get_ysize(); }

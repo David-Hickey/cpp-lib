@@ -142,6 +142,14 @@ void test_area() {
     assert(bb.get_zsurface() == 13*17);
 }
 
+void test_elementwise_filters() {
+    const MathArray<double, 5> a1{1,   2, 3, 4,  5 };
+    const MathArray<double, 5> a2{0.5, 2, 5, -1, 10};
+
+    assert_all_eq(elementwise_max(a1, a2), {1, 2, 5, 4, 10}, "Failed elementwise_max test");
+    assert_all_eq(elementwise_min(a1, a2), {0.5, 2, 3, -1, 5}, "Failed elementwise_max test");
+}
+
 int main() {
     test_contains();
     test_reflect();
@@ -150,5 +158,6 @@ int main() {
     test_constructors();
     test_random();
     test_area();
+    test_elementwise_filters();
 
 }
