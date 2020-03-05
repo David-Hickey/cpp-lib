@@ -70,7 +70,7 @@ size_t find_first_element_greater_than(const MathArray<T, N>& v, const T& search
 template <class T>
 inline size_t weighted_index(const std::vector<T>& weights, std::mt19937& engine) noexcept {
     const std::vector<T> cdf = cumsum(weights);
-    const double rand = std::uniform_real_distribution<T>(0, cdf.back())(engine);
+    const T rand = std::uniform_real_distribution<T>(0, cdf.back())(engine);
     const size_t index = find_first_element_greater_than(cdf, rand);
 
     return index;
