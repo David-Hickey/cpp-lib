@@ -8,13 +8,13 @@
 
 template <class T>
 inline T& choice(const std::vector<T>& v, std::mt19937& engine) noexcept {
-    return v[std::uniform_int_distribution(0, v.size() - 1)(engine)];
+    return v[std::uniform_int_distribution<int>(0, v.size() - 1)(engine)];
 }
 
 
 template <class T, size_t N>
 inline T& choice(const MathArray<T, N>& v, std::mt19937& engine) noexcept {
-    return v[std::uniform_int_distribution(0, v.size() - 1)(engine)];
+    return v[std::uniform_int_distribution<int>(0, v.size() - 1)(engine)];
 }
 
 
