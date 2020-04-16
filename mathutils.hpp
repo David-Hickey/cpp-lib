@@ -141,7 +141,7 @@ inline double convert(const std::string& s) {
 }
 
 template <class T>
-inline struct MilsteinParameters<T> {
+struct MilsteinParameters {
     T alpha_1;
     T alpha_0;
 
