@@ -15,7 +15,6 @@ inline constexpr int levicevita(const int i, const int j, const int k) noexcept 
     return (i - j) * (j - k) * (k - i) / 2;
 }
 
-
 inline constexpr int delta(const int i, const int j) noexcept {
     return int(i == j);
 }
@@ -139,4 +138,65 @@ inline double convert(const std::string& s) {
     }
 
     return value;
+}
+
+template <class T>
+inline struct MilsteinParameters<T> {
+    T alpha_1;
+    T alpha_0;
+
+    T beta_1;
+    T beta_0;
+
+    T gamma_1;
+    T gamma_0;
+
+    MilsteinParameters(const T alpha_1, const T alpha_0, const T beta_1, const T beta_0)
+    : alpha_1(alpha_1)
+    , alpha_0(alpha_0)
+    , beta_1(beta_1)
+    , beta_0(beta_0)
+    , gamma_1(1)
+    , gamma_0(1 + alpha_1) {}
+};
+
+const static MilsteinParameters<double> adams_bashforth_parameters(
+    -1.0, 0.0,
+    1.5, -0.5
+);
+
+const static MilsteinParameters<double> midpoint_rule_parameters(
+    0.0, -1.0,
+    2.0, 0.0
+);
+
+/**
+  * @param x current position of the particle
+  * @param x_prev previous position of the particle
+  * @param u current speed of flow field
+  * @param u_prev previous speed of flow field
+  * @param w proposed noise term
+  * @param w_prev previous noise term
+  * @param delta timestep
+  * @param p struct of parameters to inform what type of milstein this is
+  */
+template <class T>
+inline T milstein(const T x, const T x_prev, const T u, const T u_prev, const T w, const T w_prev, const T delta, const MilsteinParameters<T>& p) {
+    const T term_1 = -p.alpha_1 * x - p.alpha_0 * x_prev;
+    const T term_2 = delta * (p.beta_1 * u + p.beta_0 * u_prev);
+    const T term_3 = p.gamma_1 * w + p.gamma_0 * w_prev;
+
+    return term_1 + term_2 + term_3;
+}
+
+inline double adams_bashforth_milstein(const double x, const double x_prev, const double u, const double u_prev, const double w, const double w_prev, const double delta) {
+    return milstein(x, x_prev, u, u_prev, w, w_prev, delta, adams_bashforth_parameters);
+}
+
+inline double midpoint_rule_milstein(const double x, const double x_prev, const double u, const double u_prev, const double w, const double w_prev, const double delta) {
+    return milstein(x, x_prev, u, u_prev, w, w_prev, delta, midpoint_rule_parameters);
+}
+
+inline double euler_maruyama(const double x, const double u, const double w, const double delta) {
+    return x + w + u * delta;
 }
