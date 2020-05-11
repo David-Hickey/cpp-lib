@@ -46,10 +46,10 @@ inline size_t find_first_element_greater_than(const std::vector<T>& v, const T& 
     return v.size();
 }
 
-template <class T>
-inline size_t find_first_element_greater_than_sorted(const std::vector<T>& v, const T& search) noexcept {
-    return std::distance(v.begin(), std::lower_bound(v.begin(), v.end(), search));
-}
+// template <class T>
+// inline size_t find_first_element_greater_than_sorted(const std::vector<T>& v, const T& search) noexcept {
+//     return std::distance(v.begin(), std::lower_bound(v.begin(), v.end(), search));
+// }
 
 /**
   * Alas, linear time rather than clever logarithmic time. Had to implement this
