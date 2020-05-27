@@ -220,7 +220,7 @@ public:
 
     constexpr bool contains_nan() const noexcept {
         #ifdef __FAST_MATH__
-        #warning "MathArray.contains_nan() will not work properly with -ffast-math"
+        throw std::runtime_error("MathArray.contains_nan() will not work properly with -ffast-math");
         #endif
 
         for (const T v : this->data) {
