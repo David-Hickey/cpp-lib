@@ -2,6 +2,8 @@
 #include "testutils.hpp"
 #include "arrayutils.hpp"
 
+using namespace dav;
+
 void test_access() {
     {
         Tensor<int, 2, 2> t{0, 1,

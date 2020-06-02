@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 
+using namespace dav;
 
 void test_stokes_drag() {
     const MathArray<double, 3> velocity{-1, 0, 0};

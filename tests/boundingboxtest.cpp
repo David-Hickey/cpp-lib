@@ -4,6 +4,8 @@
 
 #include <random>
 
+using namespace dav;
+
 const BoundingBox bb(96, 100, 98);
 const MathArray<int, 3> inside{1, 1, 1};
 const MathArray<int, 3> outside_x_greater{53, 0, 0};

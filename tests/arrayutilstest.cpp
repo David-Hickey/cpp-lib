@@ -2,6 +2,8 @@
 #include "testutils.hpp"
 #include <limits>
 
+using namespace dav;
+
 void test_all() {
     assert(!all(MathArray<bool, 4>{false, false, false, true}));
     assert(all(MathArray<bool, 5>{true, true, true, true, true}));

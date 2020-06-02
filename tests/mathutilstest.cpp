@@ -2,6 +2,8 @@
 #include "testutils.hpp"
 #include<iostream>
 
+using namespace dav;
+
 void test_flatten() {
     const int bins_x = 13;
     const int bins_y = 11;
@@ -62,7 +64,7 @@ void test_pow() {
     assert(power<int, 4>(3) == 81, "Failed arbitrary power test");
     assert(power<int, 4>(-3) == 81, "Failed arbitrary power test");
 
-    assert(std::abs(hypot(3, 4) - 5) < 1e-16, "Failed hypotenuse test");
+    assert(std::abs(dav::hypot(3, 4) - 5) < 1e-16, "Failed hypotenuse test");
 }
 
 void test_convert() {
