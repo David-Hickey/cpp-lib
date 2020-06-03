@@ -16,7 +16,7 @@
     public:
         T data[N];
 
-        constexpr T& operator[](size_t i) noexcept {
+        T& operator[](size_t i) noexcept {
             return this->data[i];
         }
 
@@ -40,11 +40,11 @@
             return this->data[i];
         }
 
-        constexpr T* begin() noexcept {
+        T* begin() noexcept {
             return std::begin(this->data);
         }
 
-        constexpr T* end() noexcept {
+        T* end() noexcept {
             return std::end(this->data);
         }
 
@@ -56,13 +56,13 @@
             return std::end(this->data);
         }
 
-        constexpr T& front() noexcept {
+        T& front() noexcept {
             static_assert(N > 0, "No data in 0-length array");
 
             return this->data[0];
         }
 
-        constexpr T& back() noexcept {
+        T& back() noexcept {
             static_assert(N > 0, "No data in 0-length array");
 
             return this->data[N - 1];
@@ -135,13 +135,13 @@
             return output;
         }
 
-        constexpr MathArray<T, N>& set(const size_t index, const T&& value) noexcept {
+        MathArray<T, N>& set(const size_t index, const T&& value) noexcept {
             this->data[index] = value;
 
             return *this;
         }
 
-        constexpr MathArray<T, N>& set(const size_t index, const T& value) noexcept {
+        MathArray<T, N>& set(const size_t index, const T& value) noexcept {
             this->data[index] = value;
 
             return *this;
@@ -157,13 +157,13 @@
             return output.set(index, value);
         }
 
-        constexpr MathArray<T, N>& add_index(const size_t index, const T&& value) noexcept {
+        MathArray<T, N>& add_index(const size_t index, const T&& value) noexcept {
             this->data[index] += value;
 
             return *this;
         }
 
-        constexpr MathArray<T, N>& add_index(const size_t index, const T& value) noexcept {
+        MathArray<T, N>& add_index(const size_t index, const T& value) noexcept {
             this->data[index] += value;
 
             return *this;

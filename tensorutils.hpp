@@ -86,7 +86,7 @@ namespace dav {
             return this->data[this->flatten(i)];
         }
 
-        const T& operator[](const Index& i) const noexcept {
+        constexpr const T& operator[](const Index& i) const noexcept {
             return this->data[this->flatten(i)];
         }
 
@@ -94,7 +94,7 @@ namespace dav {
             return Row<T, N, M>{this, i};
         }
 
-        ConstRow<T, N, M> operator[](const size_t i) const noexcept {
+        constexpr ConstRow<T, N, M> operator[](const size_t i) const noexcept {
             ConstRow<T, N, M> out{this, i};
 
             return out;
