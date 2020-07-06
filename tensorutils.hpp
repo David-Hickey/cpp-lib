@@ -254,3 +254,32 @@ namespace dav {
     }
 
 }
+
+template<class T, size_t N, size_t M>
+inline std::ostream& operator<< (std::ostream& out, const dav::Tensor<T, N, M>& t) {
+    if constexpr (N == 0 && M == 0) {
+        out << "()";
+        return out;
+    } else {
+        out << "{ ";
+
+        for (size_t i = 0; i < N - 1; ++i) {
+            out << "{ ";
+
+            for (size_t j = 0; j < M - 1; ++j) {
+                out << t[{i, j}] << ", ";
+            }
+
+            out << t[{i, M - 1}] << " }, ";
+        }
+
+        std::cout << "{ ";
+        for (size_t j = 0; j < M - 1; ++j) {
+            out << t[{N - 1, j}] << ", ";
+        }
+
+        out << t[{N - 1, M - 1}] << " } }" << std::endl;
+
+        return out;
+    }
+}
