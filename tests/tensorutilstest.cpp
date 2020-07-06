@@ -226,4 +226,8 @@ int main() {
     test_to_array();
     test_addition();
     test_multiplication();
+
+
+    const Tensor<int, 3, 2> t{1, 2, 3, 4, 5, 6};
+    std::cout << t << std::endl;
 }
