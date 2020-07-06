@@ -8,7 +8,7 @@
 #include <iterator>
 #include <algorithm>
 
-    namespace dav {
+namespace dav {
 
     template<class T, size_t N>
     class MathArray {
