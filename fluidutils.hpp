@@ -127,16 +127,15 @@ namespace dav {
 
     inline Tensor<double, 3, 3> blake_tensor_at(const MathArray<double, 3>& position,
                                                 const MathArray<double, 3>& real_sphere_location,
-                                                const double z_min,
-                                                const double shear_viscosity,
-                                                const bool include_translation_terms=true) {
+                                                const double shear_viscosity) {
 
-        const MathArray<double, 3> transformed_position = transform_position(position, z_min);
-        const MathArray<double, 3> transformed_sphere_position = transform_position(real_sphere_location, z_min);
-
-        const MathArray<double, 3> r = transformed_position - transformed_sphere_position;
-        const MathArray<double, 3> image_sphere_location{transformed_sphere_position[0], transformed_sphere_position[1], -transformed_sphere_position[2]};
-        const MathArray<double, 3> R = transformed_position - image_sphere_location;
+        const MathArray<double, 3> r = position - real_sphere_location;
+        const MathArray<double, 3> image_sphere_location{
+            real_sphere_location[0],
+            real_sphere_location[1],
+            -real_sphere_location[2]
+        };
+        const MathArray<double, 3> R = position - image_sphere_location;
         const double r_mag = magnitude(r);
         const double R_mag = magnitude(R);
 
@@ -148,11 +147,11 @@ namespace dav {
 
         for (size_t i = 0; i < 3; ++i) {
             for (size_t j = 0; j < 3; ++j) {
-                const double term_1a = include_translation_terms ? delta(i, j) / r_mag : 0;
-                const double term_1b = include_translation_terms ? r[i] * r[j] / (r_mag * r_mag * r_mag) : 0;
+                const double term_1a = delta(i, j) / r_mag;
+                const double term_1b = r[i] * r[j] / dav::cube(r_mag);
 
                 const double term_2a = -delta(i, j) / R_mag;
-                const double term_2b = -R[i] * R[j] / (R_mag * R_mag * R_mag);
+                const double term_2b = -R[i] * R[j] / dav::cube(R_mag);
 
                 blake_tensor[{i, j}] += prefactor * (term_1a + term_1b + term_2a + term_2b);
             }
@@ -164,13 +163,13 @@ namespace dav {
 
                 double derivative_term = 0;
 
-                derivative_term += delta(i, j) * separation / std::pow(R_mag, 3);
+                derivative_term += delta(i, j) * separation / dav::cube(R_mag);
                 derivative_term -= 3 * R[i] * R[j] * separation / std::pow(R_mag, 5);
 
-                derivative_term += R[j] * delta(i, 2) / std::pow(R_mag, 3);
-                derivative_term -= R[i] * delta(j, 2) / std::pow(R_mag, 3);
+                derivative_term += R[j] * delta(i, 2) / dav::cube(R_mag);
+                derivative_term -= R[i] * delta(j, 2) / dav::cube(R_mag);
 
-                derivative_term -= delta(i, j) * R[2] / std::pow(R_mag, 3);
+                derivative_term -= delta(i, j) * R[2] / dav::cube(R_mag);
                 derivative_term += 3 * R[i] * R[2] * R[j] / std::pow(R_mag, 5);
 
                 blake_tensor[{i, j}] += 2 * delta_term * prefactor * separation * derivative_term;
@@ -184,21 +183,10 @@ namespace dav {
     inline MathArray<double, 3> blake_flow_at(const MathArray<double, 3>& position,
                                               const MathArray<double, 3>& real_sphere_location,
                                               const MathArray<double, 3>& force,
-                                              const double z_min,
-                                              const double shear_viscosity,
-                                              const bool include_translation_terms=true) {
-
-        const Tensor<double, 3, 3> blake_tensor = blake_tensor_at(position, real_sphere_location, z_min, shear_viscosity, include_translation_terms);
-
-        return blake_tensor * force;
-    }
-
-    inline MathArray<double, 3> blake_flow_at(const MathArray<double, 3>& position,
-                                              const MathArray<double, 3>& real_sphere_location,
-                                              const MathArray<double, 3>& force,
-                                              const BoundingBox& bb,
                                               const double shear_viscosity) {
 
-        return blake_flow_at(position, real_sphere_location, force, bb.get_zmin(), shear_viscosity);
+        const Tensor<double, 3, 3> blake_tensor = blake_tensor_at(position, real_sphere_location, shear_viscosity);
+
+        return blake_tensor * force;
     }
 }
