@@ -147,6 +147,15 @@ namespace dav {
             return *this;
         }
 
+        MathArray<T, N>& normalise() noexcept {
+            const T length = (T) magnitude(*this);
+            for (int i = 0; i < N; ++i) {
+                data[i] /= length;
+            }
+
+            return *this;
+        }
+
         constexpr MathArray<T, N> copy_set(const size_t index, const T& value) const noexcept {
             MathArray<T, N> output(*this);
             return output.set(index, value);
