@@ -22,9 +22,9 @@ void test_stokes_drag() {
 }
 
 
-std::function<MathArray<double, 3>(const MathArray<double, 3>&, const MathArray<double, 3>&)> curry_blake_tester(const BoundingBox& bb, const MathArray<double, 3> real_sphere_location, const double shear_viscosity) {
+std::function<MathArray<double, 3>(const MathArray<double, 3>&, const MathArray<double, 3>&)> curry_blake_tester(const MathArray<double, 3> real_sphere_location, const double shear_viscosity) {
     return [=](const MathArray<double, 3>& position, const MathArray<double, 3>& force) {
-        return blake_flow_at(position, real_sphere_location, force, bb, shear_viscosity);
+        return blake_flow_at(position, real_sphere_location, force, shear_viscosity);
     };
 }
 
@@ -34,7 +34,7 @@ void test_blake() {
     const double shear_viscosity = 1;
 
     // Curried function to test blake tensor.
-    auto blake_tester = curry_blake_tester(bb, real_sphere_location, shear_viscosity);
+    auto blake_tester = curry_blake_tester(real_sphere_location, shear_viscosity);
 
     // Test boundary condition
     assert(all(abs(blake_tester(MathArray<double, 3>{-10, 0, 0}, MathArray<double, 3>{-1, 0, 0}) - MathArray<double, 3>{0, 0, 0}) < 1e-12), "Failed blake tensor 1");
